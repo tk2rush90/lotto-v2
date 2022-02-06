@@ -1,0 +1,13 @@
+@import "mixins";
+@import "props";
+
+// container
+:host {
+  display: block;
+  max-width: 360px;
+  width: calc(100% - 20px);
+}
+
+app-chosen-statistics {
+  margin-top: 20px;
+}

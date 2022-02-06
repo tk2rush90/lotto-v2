@@ -1,0 +1,15 @@
+@import "mixins";
+@import "props";
+
+// container
+:host {
+  display: block;
+}
+
+// loading cover
+app-loading-cover {
+  @include box(100%);
+  @include top-left;
+  position: fixed;
+  z-index: 100;
+}

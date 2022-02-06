@@ -1,0 +1,35 @@
+<!-- header -->
+<app-sub-header>
+  <!-- label -->
+  <app-info-label label="각 번호별 발생 확률">
+    <app-text appInfoContent>
+      이전 당첨 기록에서 각 번호가 나타난 빈도를 표시합니다.
+    </app-text>
+  </app-info-label>
+
+  <!-- button -->
+  <button (click)="toggleSort()" appInlineButton>
+    {{sortButtonLabel}}
+  </button>
+</app-sub-header>
+
+<div
+  *ngFor="let item of occurrences"
+  class="l-result">
+  <!-- number -->
+  <app-text>
+    {{item.number}}
+  </app-text>
+
+  <!-- bar -->
+  <div class="l-bar">
+    <!-- label -->
+    <app-text type="default-transparent">
+      {{item.count}}회 / {{item.probability | number: '0.2-2'}}%
+    </app-text>
+
+    <div
+      [style.width]="item.occurrence + '%'"
+      class="l-bar-thumb"></div>
+  </div>
+</div>

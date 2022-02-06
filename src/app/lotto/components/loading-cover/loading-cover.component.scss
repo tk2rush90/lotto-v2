@@ -1,0 +1,11 @@
+@import "mixins";
+@import "props";
+
+// container
+:host {
+  @include flex(center, center);
+
+  &.l-filled {
+    background-color: $black-30;
+  }
+}

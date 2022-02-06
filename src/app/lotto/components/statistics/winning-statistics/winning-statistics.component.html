@@ -1,0 +1,43 @@
+<!-- header -->
+<app-sub-header>
+  <!-- info label -->
+  <app-info-label label="이전 결과 대비">
+    <app-text appInfoContent>
+      현재 선택한 번호를 이전 당첨 기록과 비교합니다.
+    </app-text>
+  </app-info-label>
+
+  <!-- view details -->
+  <button
+    (click)="openDetails()"
+    *ngIf="allNumbersSelected"
+    appInlineButton>
+    자세히 보기
+  </button>
+</app-sub-header>
+
+<ng-container *ngIf="allNumbersSelected; else noNumbers">
+  <!-- result -->
+  <div
+    *ngFor="let item of winnings; let index = index"
+    class="l-result">
+    <!-- prize -->
+    <app-text>
+      {{index + 1}}등
+    </app-text>
+
+    <!-- count -->
+    <app-text>
+      {{item}}회
+    </app-text>
+  </div>
+</ng-container>
+
+<ng-template #noNumbers>
+  <!-- when no selected numbers -->
+  <div class="l-empty">
+    <app-text type="grey">
+      번호를 선택해주세요.
+    </app-text>
+  </div>
+</ng-template>

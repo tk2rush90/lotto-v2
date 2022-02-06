@@ -1,0 +1,12 @@
+@import "mixins";
+@import "props";
+
+:host {
+  @include flex(center, space-between);
+  background-color: $white;
+}
+
+app-icon {
+  cursor: pointer;
+  user-select: none;
+}

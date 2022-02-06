@@ -1,0 +1,47 @@
+<!-- numbers -->
+<div class="l-numbers">
+  <!-- render numbers -->
+  <app-lotto-number
+    (click)="onClickNumber(item)"
+    *ngFor="let item of numbers"
+    [selected]="selectedNumbersMap[item]">
+    {{item}}
+  </app-lotto-number>
+</div>
+
+<!-- buttons -->
+<div class="l-buttons">
+  <!-- reset -->
+  <button (click)="resetSelection()" appFlatButton color="sunset-orange">
+    <span>초기화</span>
+    <app-icon name="reset"></app-icon>
+  </button>
+
+  <!-- auto draw -->
+  <button (click)="autoDrawNumbers()" appFlatButton color="sunset-orange">
+    <span>자동 선택</span>
+    <app-icon name="magic"></app-icon>
+  </button>
+</div>
+
+<!-- bottom row -->
+<div class="l-bottom">
+  <!-- info label -->
+  <app-info-label label="자동선택 방법">
+    <app-text appInfoContent>
+      '기본' 방식은 모든 번호에 동일한 확률을 적용합니다.<br/>
+      '가중' 방식은 발생 빈도가 적었던 번호에 더 높은 확률을 적용합니다.
+    </app-text>
+  </app-info-label>
+
+  <!-- checkboxes -->
+  <div class="l-checkboxes">
+    <app-labeled-checkbox (checkedChange)="onLogicDefaultChanged($event)" [checked]="isDefault">
+      기본
+    </app-labeled-checkbox>
+
+    <app-labeled-checkbox (checkedChange)="onLogicWeightedChanged($event)" [checked]="isWeighted">
+      가중
+    </app-labeled-checkbox>
+  </div>
+</div>

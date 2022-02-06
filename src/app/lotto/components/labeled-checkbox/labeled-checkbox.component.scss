@@ -1,0 +1,15 @@
+@import "mixins";
+@import "props";
+
+// container
+:host {
+  @include flex(center);
+  cursor: pointer;
+  user-select: none;
+}
+
+// checkbox
+app-checkbox {
+  margin-left: 3px;
+  pointer-events: none;
+}

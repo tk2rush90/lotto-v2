@@ -1,0 +1,59 @@
+@import "mixins";
+@import "props";
+
+// container
+:host {
+  display: block;
+}
+
+// header
+.l-header {
+  @include flex(center);
+
+  app-text + app-text {
+    margin-left: 5px;
+  }
+}
+
+.l-balls {
+  @include flex(center);
+  margin-top: 10px;
+  height: 30px;
+
+  @include screen-under(374px) {
+    height: auto;
+  }
+}
+
+// normal balls
+.l-normal-balls {
+  @include flex(null, space-between);
+  // {total} - {bonus-ball-width} - {add-icon-width} - {add-icon-margins}
+  width: calc(100% - 30px - 24px - 20px);
+
+  @include screen-under(374px) {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-row-gap: 10px;
+  }
+}
+
+// ball
+.l-ball {
+  @include ball(30px);
+  @include border(1px solid $black-15);
+  @include flex(center, center);
+  color: $white;
+  font-size: 14px;
+  background-color: $black-20;
+
+  &.l-selected {
+    background-color: $maya-blue;
+  }
+}
+
+// icon'
+app-icon {
+  @include box(24px);
+  margin: 0 10px;
+}

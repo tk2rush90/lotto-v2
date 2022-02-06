@@ -1,0 +1,21 @@
+@import "mixins";
+@import "props";
+
+// container
+:host {
+  display: block;
+}
+
+// anchor
+a {
+  @include flex(center);
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// label text
+app-text {
+  margin-left: 5px;
+}

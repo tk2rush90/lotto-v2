@@ -21,7 +21,15 @@
     "lib": [
       "es2020",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@tk-ui/*": [
+        "src/app/tk-ui/*"
+      ],
+      "@lotto/*": [
+        "src/app/lotto/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

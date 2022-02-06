@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "delete:build": "node scripts/delete.js",
+    "build:github": "npm run delete:build && ng build --output-path=docs --deploy-url=/lotto-v2/ --base-href=/lotto-v2"
   },
   "private": true,
   "dependencies": {

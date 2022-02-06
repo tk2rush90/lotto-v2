@@ -1,0 +1,48 @@
+@import "mixins";
+@import "props";
+
+// container
+:host {
+  display: inline-block;
+
+  // default text
+  &.l-default {
+    font-size: 14px;
+    font-weight: 400;
+    color: $black;
+  }
+
+  // title
+  &.l-title {
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 45px;
+    color: $smalt;
+  }
+
+  // section header
+  &.l-section-header {
+    font-size: 16px;
+    font-weight: 400;
+    color: $black;
+  }
+
+  // grey text
+  &.l-grey {
+    font-size: 14px;
+    font-weight: 400;
+    color: $black-30;
+  }
+
+  &.l-default-transparent {
+    font-size: 14px;
+    font-weight: 400;
+    color: $black-50;
+  }
+
+  &.l-default-transparent-more {
+    font-size: 14px;
+    font-weight: 400;
+    color: $black-30;
+  }
+}

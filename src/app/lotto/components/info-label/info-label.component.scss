@@ -1,0 +1,26 @@
+@import "mixins";
+@import "props";
+
+// container
+:host {
+  @include flex(center);
+}
+
+// question icon
+app-icon {
+  @include box(20px);
+  margin-left: 3px;
+  cursor: pointer;
+  user-select: none;
+}
+
+// info popup
+.l-popup {
+  @include padding(10px);
+  @include border(1px solid $black-30);
+  position: fixed;
+  background-color: $white;
+  width: 200px;
+  margin-left: -100px;
+  z-index: 100;
+}

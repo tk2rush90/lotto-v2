@@ -1,0 +1,23 @@
+@import "mixins";
+@import "props";
+
+// container
+:host {
+  display: block;
+  width: 360px;
+  height: 100%;
+}
+
+app-modal-container {
+  @include box(100%);
+}
+
+app-modal-content {
+  // {total} - {margin} - {header-height}
+  height: calc(100% - 20px - 24px);
+  overflow: auto;
+}
+
+app-winning-detail-item + app-winning-detail-item {
+  margin-top: 20px;
+}
