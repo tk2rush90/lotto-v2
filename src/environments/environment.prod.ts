@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  api: '',
+  api: 'https://tk2-backend.herokuapp.com/lotto',
 };
