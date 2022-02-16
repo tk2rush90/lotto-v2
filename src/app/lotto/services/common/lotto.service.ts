@@ -109,6 +109,12 @@ export class LottoService {
   get lastSelectedLogic(): DrawLogic {
     const logic = this.storageService.getFromLocal<DrawLogic>(LAST_SELECTED_LOGIC);
 
+    // In the previous, only 2 logic were existed, `default` and `weighted`.
+    // So for the compatibility of new version, apply `weighted` to `weighted1`.
+    if ((logic as any) === 'weighted') {
+      return 'weighted1';
+    }
+
     return logic ? logic : 'default';
   }
 
