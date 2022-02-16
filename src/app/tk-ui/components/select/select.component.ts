@@ -11,16 +11,16 @@ export class SelectComponent<T> extends SelectBaseComponent<T> implements OnInit
   /**
    * override value type from SelectBaseComponent
    */
-  value: T | undefined;
+  override value: T | undefined;
 
   constructor(
-    @Self() @Optional() public ngControl: NgControl,
-    public elementRef: ElementRef<HTMLElement>,
-    protected changeDetectorRef: ChangeDetectorRef,
+    @Self() @Optional() public override ngControl: NgControl,
+    public override elementRef: ElementRef<HTMLElement>,
+    protected override changeDetectorRef: ChangeDetectorRef,
   ) {
     super(ngControl, elementRef, changeDetectorRef);
   }
 
-  ngOnInit(): void {
+  override ngOnInit(): void {
   }
 }

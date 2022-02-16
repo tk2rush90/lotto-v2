@@ -1,13 +1,19 @@
 import {Component, OnInit} from '@angular/core';
 import {DrawLogic, LottoService} from '@lotto/services/common/lotto.service';
 import {LottoUtil} from '@lotto/utils/lotto.util';
+import {LottoResult} from '@lotto/models/lotto-result';
+import {SubscriptionService} from '@tk-ui/services/common/subscription.service';
 
 @Component({
   selector: 'app-lotto-form',
   templateUrl: './lotto-form.component.html',
-  styleUrls: ['./lotto-form.component.scss']
+  styleUrls: ['./lotto-form.component.scss'],
+  providers: [
+    SubscriptionService,
+  ],
 })
 export class LottoFormComponent implements OnInit {
+
   // Available lotto numbers.
   numbers: number[] = [];
 
@@ -20,8 +26,12 @@ export class LottoFormComponent implements OnInit {
   // Auto drawing logic.
   logic: DrawLogic = this.lottoService.lastSelectedLogic;
 
+  // Ranged lotto results.
+  private _results: LottoResult[] = [];
+
   constructor(
     private lottoService: LottoService,
+    private subscriptionService: SubscriptionService,
   ) {
   }
 
@@ -33,14 +43,22 @@ export class LottoFormComponent implements OnInit {
   }
 
   /**
-   * Get the state of weighted logic selected.
+   * Get the state of weighted1 logic selected.
    */
-  get isWeighted(): boolean {
-    return this.logic === 'weighted';
+  get isWeighted1(): boolean {
+    return this.logic === 'weighted1';
+  }
+
+  /**
+   * Get the state of weighted2 logic selected.
+   */
+  get isWeighted2(): boolean {
+    return this.logic === 'weighted2';
   }
 
   ngOnInit(): void {
     this._initialize();
+    this._subscribeRangedLottoResults();
   }
 
   /**
@@ -75,9 +93,20 @@ export class LottoFormComponent implements OnInit {
    * Set the logic value on weighted checkbox changed.
    * @param state Changed state.
    */
-  onLogicWeightedChanged(state: boolean): void {
+  onLogicWeighted1Changed(state: boolean): void {
     if (state) {
-      this.logic = 'weighted';
+      this.logic = 'weighted1';
+      this.lottoService.lastSelectedLogic = this.logic;
+    }
+  }
+
+  /**
+   * Set the logic value on weighted checkbox changed.
+   * @param state Changed state.
+   */
+  onLogicWeighted2Changed(state: boolean): void {
+    if (state) {
+      this.logic = 'weighted2';
       this.lottoService.lastSelectedLogic = this.logic;
     }
   }
@@ -96,8 +125,13 @@ export class LottoFormComponent implements OnInit {
         break;
       }
 
-      case 'weighted': {
-        numbers = this.lottoService.drawNumbersByWeightedLogic();
+      case 'weighted1': {
+        numbers = this.lottoService.drawNumbersByWeighted1Logic(this._results);
+        break;
+      }
+
+      case 'weighted2': {
+        numbers = this.lottoService.drawNumbersByWeighted2Logic(this._results);
         break;
       }
     }
@@ -117,6 +151,18 @@ export class LottoFormComponent implements OnInit {
     const selectedNumbers = this.lottoService.lastSelectedNumbers;
 
     selectedNumbers.forEach(item => this._toggleSelectedNumber(item));
+  }
+
+  /**
+   * Subscribe ranged lotto results.
+   */
+  private _subscribeRangedLottoResults(): void {
+    const sub = this.lottoService
+      .subscribeRangedResults(res => {
+        this._results = res;
+      });
+
+    this.subscriptionService.store('_subscribeRangedLottoResults', sub);
   }
 
   /**

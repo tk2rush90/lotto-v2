@@ -6,3 +6,13 @@
   display: block;
   width: 290px;
 }
+
+app-lotto-range {
+  margin-top: 30px;
+}
+
+.l-last-crawled {
+  @include flex(center, space-between);
+  font-size: 14px;
+  margin-top: 30px;
+}

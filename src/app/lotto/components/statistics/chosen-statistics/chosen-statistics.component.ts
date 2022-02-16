@@ -45,7 +45,7 @@ export class ChosenStatisticsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._subscribeLottoResults();
+    this._subscribeRangedLottoResults();
   }
 
   /**
@@ -69,17 +69,17 @@ export class ChosenStatisticsComponent implements OnInit {
   }
 
   /**
-   * Subscribe the lotto results.
+   * Subscribe the ranged lotto results.
    */
-  private _subscribeLottoResults(): void {
+  private _subscribeRangedLottoResults(): void {
     const sub = this.lottoService
-      .subscribeResults(res => {
+      .subscribeRangedResults(res => {
         this._results = res;
         this.occurrences = LottoUtil.getNumberOccurrenceStatistics(this._results);
         this._sortOccurrences();
       });
 
-    this.subscriptionService.store('_subscribeLottoResults', sub);
+    this.subscriptionService.store('_subscribeRangedLottoResults', sub);
   }
 
   /**

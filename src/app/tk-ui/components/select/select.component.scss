@@ -3,7 +3,7 @@
 
 :host {
   display: block;
-  height: 40px;
+  height: 35px;
 }
 
 // select container
@@ -53,7 +53,7 @@ $option-container-height: calc(#{$option-height} * 5);
 
 // option item
 .tk-option {
-  @include padding(0 20px);
+  @include padding(0 10px);
   @include flex(center);
   @include clickable();
   height: $option-height;

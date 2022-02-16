@@ -4,16 +4,10 @@
 // input field
 .tk-input-field {
   @include padding(0 15px);
-  @include border(1px solid #BEBEBE);
+  @include border(1px solid $black-20);
   background-color: $white;
-  height: 40px;
+  height: 35px;
   font-size: 14px;
-
-  &:not(:disabled) {
-    &:focus {
-      border-color: $black;
-    }
-  }
 
   &::placeholder {
     color: #E1E1E1;
@@ -21,7 +15,7 @@
 
   &.ng-touched, &.ng-dirty {
     &.ng-invalid {
-      background-color: #FF4343;
+      background-color: $sunset-orange;
     }
   }
 }

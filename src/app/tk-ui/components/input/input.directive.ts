@@ -1,4 +1,13 @@
-import {ChangeDetectorRef, Directive, ElementRef, HostBinding, HostListener, Input, Optional, Self} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Directive,
+  ElementRef,
+  HostBinding,
+  HostListener,
+  Input,
+  Optional,
+  Self
+} from '@angular/core';
 import {FormControlBaseDirective} from '@tk-ui/components/form-control-base/form-control-base.directive';
 import {NgControl} from '@angular/forms';
 
@@ -42,8 +51,8 @@ export class InputDirective extends FormControlBaseDirective<string> {
   @HostBinding('class.tk-input-field') baseClass = true;
 
   constructor(
-    @Self() @Optional() public ngControl: NgControl,
-    protected changeDetectorRef: ChangeDetectorRef,
+    @Self() @Optional() public override ngControl: NgControl,
+    protected override changeDetectorRef: ChangeDetectorRef,
     private elementRef: ElementRef<HTMLInputElement>,
   ) {
     super(ngControl, changeDetectorRef);
@@ -53,7 +62,7 @@ export class InputDirective extends FormControlBaseDirective<string> {
    * write value to input
    * @param value new value
    */
-  writeValue(value: string | undefined): void {
+  override writeValue(value: string | undefined): void {
     const el = this.elementRef?.nativeElement;
 
     if (el) {

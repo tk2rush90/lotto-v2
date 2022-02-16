@@ -41,7 +41,7 @@ export class WinningStatisticsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._subscribeLottoResults();
+    this._subscribeRangedLottoResults();
     this._subscribeSelectedNumbers();
   }
 
@@ -55,13 +55,20 @@ export class WinningStatisticsComponent implements OnInit {
   }
 
   /**
-   * Subscribe the historical results.
+   * Subscribe ranged lotto results.
    */
-  private _subscribeLottoResults(): void {
+  private _subscribeRangedLottoResults(): void {
     const sub = this.lottoService
-      .subscribeResults(res => this._results = res);
+      .subscribeRangedResults(res => {
+        this._results = res;
 
-    this.subscriptionService.store('_subscribeLottoResults', sub);
+        // Update the winning results if all number selected.
+        if (this.allNumbersSelected) {
+          this._getWinningResults();
+        }
+      });
+
+    this.subscriptionService.store('_subscribeRangedLottoResults', sub);
   }
 
   /**

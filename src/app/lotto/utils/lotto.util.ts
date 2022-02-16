@@ -52,7 +52,7 @@ export class LottoUtil {
    * So the numbers array should be different on every choosing.
    * Default is all lotto numbers.
    */
-  static getWeightedProbabilities(results: LottoResult[], numbers = this.getNumbers()): LottoProbability {
+  static getWeighted1Probabilities(results: LottoResult[], numbers = this.getNumbers()): LottoProbability {
     const {total, occurrence} = this.getNumberOccurrences(results, numbers);
 
     // Normal probability of each number.
@@ -65,6 +65,37 @@ export class LottoUtil {
 
       // Multiply diff to give more weight.
       occurrence[item] = currentProbability + (diff * 2);
+
+      // If the last number, set the probability to `1`.
+      // Each number can be chosen by the result of `Math.random()`,
+      // so the last number should be `1`.
+      // And if the number is not first number, add previous probability to
+      // calculate the probability range between previous and current number.
+      if (index === numbers.length - 1) {
+        occurrence[item] = 1;
+      } else if (index !== 0) {
+        occurrence[item] += occurrence[numbers[index - 1]];
+      }
+    });
+
+    return occurrence;
+  }
+
+  /**
+   * Get the weighted probability of each number from the results.
+   * More often appeared numbers will have more chance to be picked.
+   * @param results Lotto results.
+   * @param numbers
+   * The numbers that can be chosen. Each number should be chosen as independent.
+   * So the numbers array should be different on every choosing.
+   * Default is all lotto numbers.
+   */
+  static getWeighted2Probabilities(results: LottoResult[], numbers = this.getNumbers()): LottoProbability {
+    const {total, occurrence} = this.getNumberOccurrences(results, numbers);
+
+    // Calculate the weighted probabilities.
+    numbers.forEach((item, index) => {
+      occurrence[item] = occurrence[item] / total;
 
       // If the last number, set the probability to `1`.
       // Each number can be chosen by the result of `Math.random()`,

@@ -9,13 +9,19 @@ import {LottoNumberComponent} from './lotto-number/lotto-number.component';
 import {LabeledCheckboxModule} from '@lotto/components/labeled-checkbox/labeled-checkbox.module';
 import {InfoLabelModule} from '@lotto/components/info-label/info-label.module';
 import {TextModule} from '@lotto/components/text/text.module';
+import {LottoRangeComponent} from './lotto-range/lotto-range.component';
+import {SelectModule} from '@tk-ui/components/select/select.module';
+import {FormsModule} from '@angular/forms';
+import {InlineButtonModule} from '@tk-ui/components/inline-button/inline-button.module';
+import {SubHeaderModule} from '@lotto/components/sub-header/sub-header.module';
 
 
 @NgModule({
   declarations: [
     LottoDrawerComponent,
     LottoFormComponent,
-    LottoNumberComponent
+    LottoNumberComponent,
+    LottoRangeComponent
   ],
   exports: [
     LottoDrawerComponent
@@ -27,7 +33,11 @@ import {TextModule} from '@lotto/components/text/text.module';
     IconModule,
     LabeledCheckboxModule,
     InfoLabelModule,
-    TextModule
+    TextModule,
+    SelectModule,
+    FormsModule,
+    InlineButtonModule,
+    SubHeaderModule,
   ]
 })
 export class LottoDrawerModule {

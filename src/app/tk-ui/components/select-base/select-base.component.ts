@@ -13,6 +13,46 @@ export class SelectBaseComponent<T> extends FormControlBaseDirective<T> implemen
    * set placeholder
    */
   @Input() placeholder = 'Select...';
+  /**
+   * opened state
+   */
+  opened = false;
+  /**
+   * selected item's label
+   */
+  label = '';
+  /**
+   * selected item's value
+   */
+  value: any;
+  /**
+   * focused item's index
+   */
+  focusedIndex = -1;
+  /**
+   * flag to check keyboard event added
+   */
+  protected _keyboardEventAdded = false;
+
+  constructor(
+    @Self() @Optional() public override ngControl: NgControl,
+    public elementRef: ElementRef<HTMLElement>,
+    protected override changeDetectorRef: ChangeDetectorRef,
+  ) {
+    super(ngControl, changeDetectorRef);
+  }
+
+  /**
+   * option list for select component
+   */
+  protected _options: OptionItem<T>[] = [];
+
+  /**
+   * return the options
+   */
+  get options(): OptionItem<T>[] {
+    return this._options;
+  }
 
   /**
    * set options for select
@@ -23,56 +63,11 @@ export class SelectBaseComponent<T> extends FormControlBaseDirective<T> implemen
     this._setSelectedLabel();
   }
 
-  /**
-   * opened state
-   */
-  opened = false;
-
-  /**
-   * selected item's label
-   */
-  label = '';
-
-  /**
-   * selected item's value
-   */
-  value: any;
-
-  /**
-   * focused item's index
-   */
-  focusedIndex = -1;
-
-  /**
-   * option list for select component
-   */
-  protected _options: OptionItem<T>[] = [];
-
-  /**
-   * flag to check keyboard event added
-   */
-  protected _keyboardEventAdded = false;
-
-  constructor(
-    @Self() @Optional() public ngControl: NgControl,
-    public elementRef: ElementRef<HTMLElement>,
-    protected changeDetectorRef: ChangeDetectorRef,
-  ) {
-    super(ngControl, changeDetectorRef);
-  }
-
   ngOnInit(): void {
   }
 
   ngOnDestroy(): void {
     this._removeKeyboardControlEvents();
-  }
-
-  /**
-   * return the options
-   */
-  get options(): OptionItem<T>[] {
-    return this._options;
   }
 
   /**
@@ -106,9 +101,25 @@ export class SelectBaseComponent<T> extends FormControlBaseDirective<T> implemen
    * write value to component
    * @param value new value
    */
-  writeValue(value: any): void {
+  override writeValue(value: any): void {
     this.value = value;
     this._setSelectedLabel();
+  }
+
+  /**
+   * update component value with option
+   * @param option option
+   */
+  onOptionClicked(option: OptionItem<T>): void {
+    this.setValue(option.value);
+    this.close();
+  }
+
+  /**
+   * reset `focusedIndex`
+   */
+  resetFocusedIndex(): void {
+    this.focusedIndex = -1;
   }
 
   /**
@@ -122,15 +133,6 @@ export class SelectBaseComponent<T> extends FormControlBaseDirective<T> implemen
     } else {
       this.label = '';
     }
-  }
-
-  /**
-   * update component value with option
-   * @param option option
-   */
-  onOptionClicked(option: OptionItem<T>): void {
-    this.setValue(option.value);
-    this.close();
   }
 
   /**
@@ -208,12 +210,5 @@ export class SelectBaseComponent<T> extends FormControlBaseDirective<T> implemen
       window.removeEventListener('keydown', this._handleKeydownEvent);
       this._keyboardEventAdded = false;
     }
-  }
-
-  /**
-   * reset `focusedIndex`
-   */
-  resetFocusedIndex(): void {
-    this.focusedIndex = -1;
   }
 }

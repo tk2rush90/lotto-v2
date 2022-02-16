@@ -29,8 +29,9 @@
   <!-- info label -->
   <app-info-label label="자동선택 방법">
     <app-text appInfoContent>
-      '기본' 방식은 모든 번호에 동일한 확률을 적용합니다.<br/>
-      '가중' 방식은 발생 빈도가 적었던 번호에 더 높은 확률을 적용합니다.
+      <strong>'기본'</strong> 방식은 모든 번호에 동일한 확률을 적용합니다.<br/>
+      <strong>'최저가중'</strong> 방식은 발생 빈도가 적었던 번호에 더 높은 확률을 적용합니다.<br/>
+      <strong>'최다가중'</strong> 방식은 발생 빈도가 많았던 번호에 더 높은 확률을 적용합니다.
     </app-text>
   </app-info-label>
 
@@ -40,8 +41,12 @@
       기본
     </app-labeled-checkbox>
 
-    <app-labeled-checkbox (checkedChange)="onLogicWeightedChanged($event)" [checked]="isWeighted">
-      가중
+    <app-labeled-checkbox (checkedChange)="onLogicWeighted1Changed($event)" [checked]="isWeighted1">
+      최저가중
+    </app-labeled-checkbox>
+
+    <app-labeled-checkbox (checkedChange)="onLogicWeighted2Changed($event)" [checked]="isWeighted2">
+      최다가중
     </app-labeled-checkbox>
   </div>
 </div>

@@ -38,15 +38,11 @@ button {
 
 // bottom
 .l-bottom {
-  @include flex(center, space-between);
   margin-bottom: 15px;
 }
 
 // checkboxes
 .l-checkboxes {
-  @include flex();
-
-  app-labeled-checkbox + app-labeled-checkbox {
-    margin-left: 10px;
-  }
+  @include flex(center, space-between);
+  margin-top: 20px;
 }
