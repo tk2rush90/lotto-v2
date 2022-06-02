@@ -242,6 +242,12 @@ export class LottoService {
     return drawnNumbers;
   }
 
+  /**
+   * Pick the number by probabilities and fill to the `drawnNumbers`.
+   * @param numbers Total numbers can be picked.
+   * @param drawnNumbers Drawn numbers.
+   * @param probabilities Probabilities of each number.
+   */
   private _pickNumberByProbabilities(numbers: number[], drawnNumbers: number[], probabilities: LottoProbability): void {
     const random = Math.random();
 
@@ -262,6 +268,12 @@ export class LottoService {
     }
   }
 
+  /**
+   * Filter the lotto results by starting and ending rounds.
+   * @param results Total lotto results.
+   * @param startingRound The starting round.
+   * @param endingRound The ending round.
+   */
   private _filterTheRangedLottoResults(results: LottoResult[], startingRound?: number, endingRound?: number): LottoResult[] {
     if (startingRound || endingRound) {
       return results.filter(item => {
