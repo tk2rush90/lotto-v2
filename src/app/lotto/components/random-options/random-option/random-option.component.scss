@@ -1,0 +1,42 @@
+@import "mixins";
+@import "props";
+
+// RandomOption.
+:host {
+  @include flex(center, space-between);
+  @include padding(10px 15px);
+  background-color: $white-a20;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color .15s;
+
+  // Selected state.
+  &.selected {
+    background-color: $white-a50;
+  }
+}
+
+// Text container on the left.
+.text-container {
+  // Reduce checkbox width and margin.
+  width: calc(100% - 24px - 10px);
+  color: $white;
+  font-size: 14px;
+}
+
+// Name of option.
+.name {
+
+}
+
+// Description of option.
+.description {
+  margin-top: 8px;
+  color: $white-a50;
+  line-height: 1.6;
+}
+
+// Checkbox.
+app-checkbox {
+  margin-left: 10px;
+}

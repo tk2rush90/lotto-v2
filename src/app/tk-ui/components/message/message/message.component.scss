@@ -1,0 +1,42 @@
+@import "mixins";
+@import "props";
+
+// Message.
+:host {
+  @include padding(15px);
+  border-radius: 5px;
+  width: 100%;
+  max-width: 280px;
+  display: block;
+  color: white;
+  // To activate click event.
+  pointer-events: all;
+  cursor: pointer;
+  user-select: none;
+  font-size: 14px;
+  box-shadow: 0 3px 6px rgba($black, .16);
+  line-height: 1.6;
+
+  // For stackable message.
+  &.tk-message-stackable {
+
+  }
+
+  // For un-stackable message.
+  &:not(.tk-message-stackable) {
+    // Make position absolute to cover previous message.
+    position: absolute;
+  }
+
+  &.tk-message-info {
+    background-color: $black;
+  }
+
+  &.tk-message-error {
+    background-color: rgba(red, .5);
+  }
+
+  &.tk-message-success {
+    background-color: rgba(green, .5);
+  }
+}

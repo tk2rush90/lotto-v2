@@ -1,0 +1,18 @@
+<!-- Modal header -->
+<div class="modal-header">
+  <!-- Title. -->
+  <div class="title">
+    {{notice.title}}
+  </div>
+
+  <!-- Close button. -->
+  <app-icon
+    (click)="close()"
+    name="close:white"></app-icon>
+</div>
+
+<!-- Contents container. -->
+<div class="contents">
+  <markdown
+    [data]="notice.contents"></markdown>
+</div>

@@ -1,0 +1,19 @@
+<!-- Inner container for numbers. -->
+<div class="numbers-container">
+  <!-- Render number buttons. -->
+  <div
+    (click)="toggleSelectedNumber(number); emitSelected()"
+    *ngFor="let number of numbers; trackBy: numberTrackBy"
+    [class.active]="selectedNumbersMap[number]"
+    class="number"
+    appRipple>
+    <!-- Top bracket. -->
+    <div class="bracket top"></div>
+
+    <!-- Number string. -->
+    <span>{{number}}</span>
+
+    <!-- Bottom bracket. -->
+    <div class="bracket bottom"></div>
+  </div>
+</div>

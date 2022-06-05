@@ -1,0 +1,21 @@
+@import "mixins";
+@import "props";
+
+// ApplicationLoading.
+:host {
+  @include flex(center, null, column);
+  @include padding(20px);
+  width: 350px;
+}
+
+// Spinner.
+app-spinner {
+  @include rect(100%, 100px);
+}
+
+// Loading message.
+p {
+  @include padding(20px);
+  text-align: center;
+  font-size: 14px;
+}

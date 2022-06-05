@@ -1,34 +1,57 @@
 @import "mixins";
 @import "props";
 
-@mixin inline-button($color, $font-color, $hover-color, $active-color) {
-  @include attribute-styles('tk-color', $color) {
-    color: $font-color;
-
-    &:not(:disabled) {
-      @include clickable();
-
-      &:hover {
-        color: $hover-color;
-      }
-
-      &:active {
-        color: $active-color;
-      }
-    }
-
-    &:disabled {
-      opacity: .3;
-    }
-
+@mixin disabled {
+  &:disabled {
     @content;
   }
 }
 
-// inline button
-.tk-inline-button {
-  font-size: 14px;
-  background-color: transparent;
+@mixin hover {
+  &:not(:disabled) {
+    &:hover {
+      @content;
+    }
+  }
+}
 
-  @include inline-button('default', $black-30, lighten($black, 50%), lighten($black, 30%));
+@mixin active {
+  &:not(:disabled) {
+    &:active {
+      @content;
+    }
+  }
+}
+
+@mixin focus {
+  &:not(:disabled) {
+    &:focus {
+      @content;
+    }
+  }
+}
+
+.tk-inline-button {
+  // Common styles for flat button.
+  cursor: pointer;
+  user-select: none;
+
+  // Set customized styles by its color.
+  @include attr('tk-color', '') {
+    @include disabled {
+
+    }
+
+    @include hover {
+
+    }
+
+    @include active {
+
+    }
+
+    @include focus {
+
+    }
+  }
 }

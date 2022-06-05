@@ -1,33 +1,42 @@
 @import "mixins";
 @import "props";
 
-// input field
-.tk-input-field {
+// Styles for `InputDirective`.
+.tk-input {
   @include padding(0 15px);
-  @include border(1px solid $black-20);
-  background-color: $white;
-  height: 35px;
-  font-size: 14px;
+  background-color: $white-a20;
+  color: $white;
 
   &::placeholder {
-    color: #E1E1E1;
   }
 
-  &.ng-touched, &.ng-dirty {
+  // Set style for focused state.
+  &:not(.tk-disabled) {
+    &.tk-focused {
+      background-color: $white-a50;
+    }
+  }
+
+  // Set style for disabled state.
+  &.tk-disabled {
+  }
+
+  // Set style for error state.
+  &.ng-dirty, &.ng-touched {
     &.ng-invalid {
-      background-color: $sunset-orange;
+
     }
   }
 }
 
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
+// Remove number input's arrow button for Chrome, Safari, Edge and Opera.
+.tk-input::-webkit-outer-spin-button,
+.tk-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-/* Firefox */
-input[type=number] {
+// Remove number input's arrow button for Firefox.
+.tk-input[type=number] {
   -moz-appearance: textfield;
 }

@@ -1,0 +1,35 @@
+@import "mixins";
+@import "props";
+
+// Logo.
+:host {
+  @include flex(center, null, column);
+  position: relative;
+  user-select: none;
+}
+
+// Set fonts.
+h1, p {
+  @include black-han-sans;
+  font-weight: normal;
+}
+
+// Main title.
+h1 {
+  font-size: 40px;
+  color: $curious-blue;
+}
+
+// Subtitle.
+p {
+  margin-top: -10px;
+  color: $safety-orange;
+}
+
+// Balls icon.
+app-icon {
+  @include rect(48px, 41px);
+  position: absolute;
+  left: -20px;
+  top: -24px;
+}

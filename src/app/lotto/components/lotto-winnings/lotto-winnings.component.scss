@@ -1,0 +1,17 @@
+@import "mixins";
+@import "props";
+
+// LottoWinnings.
+:host {
+  @include padding(20px);
+  display: block;
+  overflow: auto;
+  height: 100%;
+  width: 450px;
+  max-height: 500px;
+}
+
+// Space between LottoWinnings.
+app-lotto-winning + app-lotto-winning {
+  margin-top: 20px;
+}

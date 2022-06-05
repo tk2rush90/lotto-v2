@@ -1,0 +1,12 @@
+@import "mixins";
+@import "props";
+
+// RandomOptions.
+:host {
+  display: block;
+}
+
+// Space between options.
+app-random-option + app-random-option {
+  margin-top: 10px;
+}

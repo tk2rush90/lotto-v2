@@ -1,0 +1,19 @@
+@import "mixins";
+@import "props";
+
+// RangeSelector.
+:host {
+  @include flex(center);
+  height: 45px;
+}
+
+// Round selector.
+app-search-select {
+  width: calc((100% - 10px) / 2);
+  height: 100%;
+}
+
+// Space between round selector.
+app-search-select + app-search-select {
+  margin-left: 10px;
+}

@@ -1,7 +1,7 @@
 export class ArrayUtil {
   /**
-   * get summation of numbers array
-   * @param numbers numbers array
+   * Get summation of number array.
+   * @param numbers - The array of numbers.
    */
   static sum(numbers: number[]): number {
     if (numbers.length > 0) {
@@ -14,8 +14,8 @@ export class ArrayUtil {
   }
 
   /**
-   * get max number from numbers array
-   * @param numbers numbers array
+   * Get maximum number from number array.
+   * @param numbers - The array of numbers.
    */
   static max(numbers: number[]): number {
     if (numbers.length > 0) {

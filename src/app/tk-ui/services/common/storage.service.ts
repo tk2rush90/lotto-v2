@@ -1,16 +1,17 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
 
-  constructor() { }
+  constructor() {
+  }
 
   /**
-   * Set data to local storage
-   * @param key key
-   * @param data data
+   * Set data to local storage.
+   * @param key - Key.
+   * @param data - Data.
    */
   setToLocal<T>(key: string, data: T): void {
     const json = JSON.stringify(data);
@@ -20,7 +21,7 @@ export class StorageService {
 
   /**
    * Get data from local storage
-   * @param key key
+   * @param key - Key.
    */
   getFromLocal<T>(key: string): T | undefined {
     const json = localStorage.getItem(key);
@@ -33,9 +34,17 @@ export class StorageService {
   }
 
   /**
+   * Remove the item from local storage.
+   * @param key - The key.
+   */
+  removeFromLocal(key: string): void {
+    localStorage.removeItem(key);
+  }
+
+  /**
    * Set data to session storage
-   * @param key key
-   * @param data data
+   * @param key - Key.
+   * @param data - Data.
    */
   setToSession<T>(key: string, data: T): void {
     const json = JSON.stringify(data);
@@ -45,7 +54,7 @@ export class StorageService {
 
   /**
    * Get data from session storage
-   * @param key key
+   * @param key - Key.
    */
   getFromSession<T>(key: string): T | undefined {
     const json = sessionStorage.getItem(key);
@@ -55,5 +64,13 @@ export class StorageService {
     } else {
       return;
     }
+  }
+
+  /**
+   * Remove the item from session storage.
+   * @param key - The key.
+   */
+  removeFromSession(key: string): void {
+    sessionStorage.removeItem(key);
   }
 }

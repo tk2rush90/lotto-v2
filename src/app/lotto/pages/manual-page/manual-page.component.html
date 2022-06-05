@@ -1,0 +1,16 @@
+<!-- Select section. -->
+<section>
+  <!-- Header. -->
+  <app-section-header>
+    번호 선택
+  </app-section-header>
+
+  <!-- Number selector. -->
+  <app-number-selector
+    (selected)="updateSelectedNumbers($event)"></app-number-selector>
+</section>
+
+<!-- Selected result. -->
+<app-select-result
+  *ngIf="allSelected"
+  [selectedNumbers]="selectedNumbers"></app-select-result>

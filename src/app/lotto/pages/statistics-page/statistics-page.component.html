@@ -1,0 +1,37 @@
+<!-- Search range. -->
+<section>
+  <!-- Header. -->
+  <app-section-header>
+    조회 기간
+  </app-section-header>
+
+  <!-- Range selector. -->
+  <app-range-selector
+    (ngModelChange)="onRangeChange($event)"
+    [ngModel]="range"></app-range-selector>
+
+  <!-- Include bonus checkbox. -->
+  <div class="checkbox-container">
+    <label>보너스 번호 포함</label>
+    <app-checkbox
+      (ngModelChange)="onIncludeBonusChange($event)"
+      [ngModel]="includeBonus"
+      [bound]="false"
+      [centered]="true"
+      rippleColor="white"
+      appRipple></app-checkbox>
+  </div>
+</section>
+
+<!-- Statistics section. -->
+<section>
+  <!-- Header. -->
+  <app-section-header>
+    통계
+  </app-section-header>
+
+  <!-- Statistics. -->
+  <app-number-statistics
+    [data]="occurrenceResult"></app-number-statistics>
+</section>
+

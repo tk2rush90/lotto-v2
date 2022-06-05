@@ -1,11 +1,12 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FlatButtonDirective } from './flat-button.directive';
-
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FlatButtonDirective} from './flat-button.directive';
 
 
 @NgModule({
-  declarations: [FlatButtonDirective],
+  declarations: [
+    FlatButtonDirective
+  ],
   exports: [
     FlatButtonDirective
   ],

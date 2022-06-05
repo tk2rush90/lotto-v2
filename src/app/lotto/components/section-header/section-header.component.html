@@ -1,8 +1,12 @@
-<!-- icon -->
-<app-icon [name]="icon"></app-icon>
-
-<!-- header text -->
-<app-text type="section-header">
-  <!-- use content -->
+<!-- Title. -->
+<h4>
+  <!-- Use content to display title. -->
   <ng-content></ng-content>
-</app-text>
+</h4>
+
+<!-- Action button. -->
+<button
+  (click)="emitActionClick()"
+  *ngIf="action">
+  {{action}}
+</button>

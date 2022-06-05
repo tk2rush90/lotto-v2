@@ -1,0 +1,18 @@
+<!-- Megaphone icon. -->
+<app-icon name="campaign:white"></app-icon>
+
+<!-- Title rolling container. -->
+<div class="rolling-container">
+  <!-- Notice title. It should be rolling. -->
+  <p [@rolling]="rollingState">
+    {{currentNotice}}
+  </p>
+
+  <!-- Next notice. -->
+  <!-- Listen `done` event of this animation to play next rolling. -->
+  <p
+    (@rolling.done)="onRollingDone($event)"
+    [@rolling]="rollingState">
+    {{nextNotice}}
+  </p>
+</div>

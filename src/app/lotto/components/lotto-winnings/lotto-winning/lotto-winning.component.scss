@@ -1,0 +1,46 @@
+@import "mixins";
+@import "props";
+
+// LottoWinning.
+:host {
+  display: block;
+}
+
+// The round number.
+.round {
+  font-size: 14px;
+}
+
+// Container for balls.
+.balls {
+  @include flex(center);
+  margin-top: 10px;
+}
+
+// Space between balls.
+app-lotto-ball + app-lotto-ball {
+  @include media(425px, null) {
+    margin-left: 10px;
+  }
+}
+
+// Add icon for bonus ball.
+app-icon {
+  @include media(425px, null) {
+    margin: 0 10px;
+  }
+
+  // For under 424px.
+  @include media(null, 424px) {
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+// Ball for under 424px.
+app-lotto-ball {
+  @include media(null, 424px) {
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+}

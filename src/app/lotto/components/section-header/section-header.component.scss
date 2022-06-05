@@ -1,13 +1,21 @@
 @import "mixins";
 @import "props";
 
-// container
+// Section header.
 :host {
-  @include flex(center);
-  height: 45px;
+  @include flex(center, space-between);
+  @include padding(10px 0);
 }
 
-// header text
-app-text {
-  margin-left: 3px;
+// Default font size.
+h4, button {
+  font-size: 14px;
+  font-weight: normal;
+  color: $white;
+}
+
+// Button style.
+button {
+  cursor: pointer;
+  user-select: none;
 }

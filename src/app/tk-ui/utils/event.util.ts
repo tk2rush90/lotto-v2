@@ -1,13 +1,13 @@
 export class EventUtil {
   /**
-   * detect pressed key type
-   * @param event keyboard event
-   * @param type key type
+   * Detect pressed key type.
+   * @param event - The keyboard event.
+   * @param type - The key type.
    */
   static isKey(event: KeyboardEvent, type: AvailableKey): boolean {
     if (event) {
       const key = event.code;
-      // keyCode is used for Safari on Mac
+      // `keyCode` is used for Safari on Mac.
       // tslint:disable-next-line:deprecation
       const code = event.keyCode;
 
@@ -18,19 +18,19 @@ export class EventUtil {
   }
 
   /**
-   * neutralize the event
-   * @param event event
+   * Disable the event.
+   * @param event - Event to disable.
    */
-  static neutralize(event: Event): void {
+  static disable(event: Event): void {
     event.stopPropagation();
     event.preventDefault();
   }
 
   /**
-   * return `true` when command key is pressed
-   * @param event keyboard event
-   * @param commandKeys command key array
-   * @param key other key
+   * Return `true` when command key is pressed.
+   * @param event - The keyboard event.
+   * @param commandKeys - The command key array.
+   * @param key - The normal key combined with command key.
    */
   static isCommand(event: KeyboardEvent, commandKeys: CommandKey[], key: AvailableKey): boolean {
     if (event) {
@@ -44,20 +44,20 @@ export class EventUtil {
   }
 
   /**
-   * Get xy position from mouse or touch event
-   * @param event event
+   * Get xy position from mouse or touch event.
+   * @param event - Can be mouse/touch/pointer event.
    */
-  static getMouseOrTouchXY(event?: MouseEvent | TouchEvent): { x: number, y: number } {
+  static getXY(event?: MouseEvent | TouchEvent | PointerEvent): { x: number, y: number } {
     return {
-      x: (event as MouseEvent)?.x || (event as TouchEvent)?.touches[0]?.pageX || 0,
-      y: (event as MouseEvent)?.y || (event as TouchEvent)?.touches[0]?.pageY || 0,
+      x: (event as MouseEvent | PointerEvent)?.x || ((event as TouchEvent)?.touches ? (event as TouchEvent).touches[0]?.pageX : 0) || 0,
+      y: (event as MouseEvent | PointerEvent)?.y || ((event as TouchEvent)?.touches ? (event as TouchEvent).touches[0]?.pageY : 0) || 0,
     };
   }
 
   /**
-   * return `true` when only the command key array are pushed
-   * @param event keyboard event
-   * @param commandKeys command key array
+   * Return `true` when only the command key array are pushed.
+   * @param event - The keyboard event
+   * @param commandKeys - The command key array.
    */
   private static _isOnlyCommand(event: KeyboardEvent, commandKeys: CommandKey[]): boolean {
     if (event) {
@@ -94,8 +94,8 @@ export class EventUtil {
   }
 
   /**
-   * return the wheel direction with deltaY
-   * @param deltaY deltaY value
+   * Return the wheel direction with deltaY.
+   * @param deltaY - The deltaY value of wheel event.
    */
   static getWheelDirection(deltaY: number): WheelDirection {
     if (deltaY > 0) {
@@ -108,9 +108,9 @@ export class EventUtil {
   }
 
   /**
-   * get the distance between two fingers
-   * @param first first finger
-   * @param second second finger
+   * Get the distance between two fingers.
+   * @param first - The first finger.
+   * @param second - The second finger.
    */
   static getFingerDistance(first: Touch | null, second: Touch | null): number {
     let distance = 0;
@@ -121,10 +121,39 @@ export class EventUtil {
 
     return distance;
   }
+
+  /**
+   * Move scroll to display `element` in the center of scrollable container.
+   * @param element - The element to display in the center of scrollable container.
+   */
+  static scrollToCenter(element: HTMLElement): void {
+    let parent = element.parentElement;
+
+    while (parent) {
+      // To find scrollable container, check the scroll width/height and offset width/height
+      if (
+        parent.scrollHeight > parent.offsetHeight
+        || parent.scrollWidth > parent.offsetWidth
+      ) {
+        const parentRect = parent.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+
+        // Scroll the `parent` to display `element` in the center of the scroll view.
+        parent.scrollTo(
+          (elementRect.left - parentRect.left) + parent.scrollLeft - (parentRect.width / 2 - elementRect.width / 2),
+          (elementRect.top - parentRect.top) + parent.scrollTop - (parentRect.height / 2 - elementRect.height / 2),
+        );
+
+        break;
+      }
+
+      parent = parent.parentElement;
+    }
+  }
 }
 
 /**
- * available key enum
+ * Enum of available keys to detect.
  */
 export enum AvailableKey {
   ContextMenu = 'ContextMenu',
@@ -325,7 +354,7 @@ interface CommandKeyMap {
 }
 
 /**
- * wheel direction enum
+ * Enum of moving direction.
  */
 export enum WheelDirection {
   upward = 'upward',

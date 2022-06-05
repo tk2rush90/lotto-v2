@@ -1,5 +1,8 @@
+import { InputDirective } from './input.directive';
+
 describe('InputDirective', () => {
   it('should create an instance', () => {
-    expect().nothing();
+    const directive = new InputDirective();
+    expect(directive).toBeTruthy();
   });
 });

@@ -1,9 +1,15 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs';
 
+/**
+ * Service to manage subscriptions.
+ * This to be injected explicitly with `providers` of `Component` or `NgModule`.
+ */
 @Injectable()
 export class SubscriptionService implements OnDestroy {
-  // storage for items
+  /**
+   * Storage for stored subscriptions.
+   */
   private storage: {[key: string]: Subscription | Subscription[]} = {};
 
   ngOnDestroy(): void {
@@ -11,20 +17,20 @@ export class SubscriptionService implements OnDestroy {
   }
 
   /**
-   * wrapper method for observable
-   * @param key identifier key
-   * @param item subscription or subscriptions
+   * Wrapper method for observable.
+   * @param key - Identifier key.
+   * @param item - Subscription or subscriptions.
    */
   store(key: string, item: Subscription | Subscription[]): void {
-    // unsubscribe before store
+    // Unsubscribe before store.
     this.unSubscribe(key);
     this.storage[key] = item;
   }
 
   /**
-   * append subscription to store
-   * @param key identifier key
-   * @param item subscription or subscriptions
+   * Append subscription to store.
+   * @param key - Identifier key.
+   * @param item - Subscription or subscriptions.
    */
   append(key: string, item: Subscription | Subscription[]): void {
     if (!this.storage[key]) {
@@ -39,8 +45,8 @@ export class SubscriptionService implements OnDestroy {
   }
 
   /**
-   * unsubscribe item by key
-   * @param key identifier key
+   * Unsubscribe item by key.
+   * @param key - Identifier key.
    */
   unSubscribe(key: string): void {
     const item = this.storage[key];
@@ -52,7 +58,7 @@ export class SubscriptionService implements OnDestroy {
   }
 
   /**
-   * unsubscribe all items
+   * Unsubscribe all items.
    */
   unSubscribeAll(): void {
     Object.keys(this.storage).forEach(key => this.unSubscribe(key));

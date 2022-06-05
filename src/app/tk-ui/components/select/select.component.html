@@ -1,57 +1,29 @@
-<!-- container -->
+<!-- The select button to toggle options visibility. -->
 <div
   #button
-  (click)="opened ? close() : open()"
-  class="tk-container">
-  <!-- input element -->
+  (click)="openOptions()"
+  class="tk-select-button">
+  <!-- Read-only input to display value and placeholder. -->
+  <!-- Prevent input focus by moving focus to host element. -->
   <input
-    #input
-    (keydown.arrowDown)="openWithInput(input)"
-    (keydown.arrowUp)="openWithInput(input)"
-    [class.ng-dirty]="dirty"
+    (focus)="focusToHost()"
+    [ngModel]="label"
+    [placeholder]="placeholder"
+    [tabindex]="-1"
+    [disabled]="disabled"
+    [class.tk-disabled]="disabled"
+    [class.tk-focused]="focused"
     [class.ng-invalid]="invalid"
     [class.ng-touched]="touched"
-    [placeholder]="placeholder"
-    [value]="label"
-    appInput
-    readonly/>
+    [class.ng-dirty]="dirty"
+    readonly
+    appInput/>
 
-  <!-- arrow down -->
-  <div class="tk-icon-container">
-    <app-icon
-      [class.tk-reverse]="opened"
-      name="keyboard-arrow-down"></app-icon>
+  <!-- Down arrow. -->
+  <div class="tk-icon">
+    <app-icon name="default-arrow-down"></app-icon>
   </div>
 </div>
 
-<!-- options container -->
-<div
-  (autoClose)="close()"
-  *ngIf="opened"
-  [positionContainer]="elementRef.nativeElement"
-  [closerContainer]="elementRef.nativeElement"
-  [closerButton]="button"
-  appAutoCloser
-  appAutoPositioner
-  appAutoScrollContainer
-  class="tk-options-container"
-  horizontalBindPosition="inside"
-  horizontalPriority="left"
-  verticalBindPosition="outside"
-  verticalPriority="bottom">
-  <!-- render option item -->
-  <div
-    (click)="onOptionClicked(item)"
-    (mouseenter)="resetFocusedIndex()"
-    *ngFor="let item of options; let index = index"
-    [class.tk-focused]="index === focusedIndex"
-    [class.tk-selected]="item.value === value"
-    [focused]="index === focusedIndex"
-    appAutoScrollItem
-    class="tk-option">
-    <!-- option label -->
-    <div class="tk-option-label">
-      {{item.label}}
-    </div>
-  </div>
-</div>
+<!-- layer outlet -->
+<app-overlay-outlet></app-overlay-outlet>

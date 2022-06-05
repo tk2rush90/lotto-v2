@@ -1,0 +1,40 @@
+@import "mixins";
+@import "props";
+
+// Auto select page.
+:host {
+  display: block;
+}
+
+// Space between sections.
+section + section {
+  margin-top: 30px;
+}
+
+// Actions section.
+.actions {
+  width: 280px;
+  margin: 30px auto 0;
+
+  // Select button.
+  button {
+    @include rect(100%, 50px);
+  }
+}
+
+// Checkbox container.
+.checkbox-container {
+  @include flex(center, space-between);
+  margin-top: 20px;
+
+  // Label
+  label {
+    font-size: 14px;
+    user-select: none;
+  }
+}
+
+// Select result.
+app-select-result {
+  margin-top: 30px;
+}

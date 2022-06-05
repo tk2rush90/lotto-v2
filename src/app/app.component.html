@@ -1,13 +1,31 @@
-<ng-container *ngIf="loading; else content">
-  <!-- loading cover for initialization -->
-  <app-loading-cover
-    [fill]="true"></app-loading-cover>
-</ng-container>
+<!-- Main container. -->
+<main>
+  <!-- Header. -->
+  <div class="header">
+    <!-- Logo. -->
+    <app-logo></app-logo>
+  </div>
 
-<ng-template #content>
-  <!-- router outlet -->
-  <router-outlet></router-outlet>
-</ng-template>
+  <!-- Notice line. -->
+  <app-notice-line
+    (click)="openNoticeList()"
+    [notices]="notices"></app-notice-line>
 
-<!-- modal outlet -->
+  <!-- Tabs. -->
+  <app-page-tabs></app-page-tabs>
+
+  <!-- Router container. -->
+  <div class="router-container">
+    <!-- Router outlet. -->
+    <router-outlet></router-outlet>
+  </div>
+</main>
+
+<!-- Footer. -->
+<app-footer></app-footer>
+
+<!-- Message outlet. -->
+<app-message-outlet></app-message-outlet>
+
+<!-- Modal outlet. -->
 <app-modal-outlet></app-modal-outlet>

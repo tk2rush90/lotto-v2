@@ -1,0 +1,62 @@
+@import "mixins";
+@import "props";
+
+// NumberSelector.
+:host {
+  @include padding(20px);
+  background-color: $white-a20;
+  display: block;
+}
+
+// Inner container to display numbers.
+.numbers-container {
+  @include flex();
+  margin: 0 auto;
+  width: 100%;
+  max-width: 390px;
+}
+
+// Number button.
+.number {
+  @include flex(center, center);
+  // Width is automatically calculated by `flex-grid()`.
+  @include flex-grid(10px, 10);
+  height: 30px;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+
+  @include media(460px, null) {
+    font-size: 14px;
+  }
+
+  @include media(null, 459px) {
+    font-size: 12px;
+  }
+
+  &.active {
+    background-color: $white;
+    color: $zambezi;
+  }
+}
+
+// Brackets for number.
+.bracket {
+  @include border-right(1px solid $white);
+  @include border-left(1px solid $white);
+  @include rect(100%, 4px);
+  position: absolute;
+
+  // Bracket for top.
+  &.top {
+    @include border-top(1px solid $white);
+    @include top-left;
+  }
+
+  // Bracket for bottom.
+  &.bottom {
+    @include border-bottom(1px solid $white);
+    @include bottom-left;
+  }
+}

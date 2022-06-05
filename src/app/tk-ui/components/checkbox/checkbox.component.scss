@@ -1,31 +1,37 @@
 @import "mixins";
 @import "props";
 
-// container
+// Checkbox.
 :host {
-  @include box(20px);
   @include flex(center, center);
-  @include border(1px solid $black-15);
+  @include box(24px);
+  background-color: $white-a20;
   cursor: pointer;
   user-select: none;
-  transition: background-color .1s;
 
-  // checked state
-  &.tk-checked {
-    background-color: $sunset-orange;
+  app-icon {
+    @include box(24px);
   }
-}
 
-// done icon color
-app-icon {
-  ::ng-deep {
-    path {
-      fill: $white;
+  // Focused state.
+  &:focus {
+
+  }
+
+  // Disabled state.
+  &.tk-disabled {
+    pointer-events: none;
+  }
+
+  // Invalid state.
+  &.ng-dirty, &.ng-touched {
+    &.ng-invalid {
+
     }
   }
-}
 
-// done icon size
-app-icon {
-  width: 14.67px;
+  // Checked state.
+  &.tk-checked {
+    background-color: $white;
+  }
 }

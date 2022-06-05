@@ -1,14 +1,14 @@
 /**
- * option item for select or select-like
+ * Option item for select or select-like.
  */
 export class OptionItem<T> {
   /**
-   * label for option
+   * Label for option.
    */
   label: string;
 
   /**
-   * value for option
+   * Value for option.
    */
   value: T;
 

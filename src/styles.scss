@@ -1,13 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
-@import "mixins";
-@import "props";
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Gothic:wght@400;700;800&display=swap');
 @import "preset";
-@import "flat-button";
-@import "inline-button";
-@import "input";
+
+* {
+  @include nanum-gothic;
+}
 
 body {
-  font-family: 'Noto Sans KR', sans-serif;
+  background-color: $nero;
+  // Default font size.
   font-size: 16px;
+  // Default font color.
+  color: $white;
+}
+
+markdown {
+  h1, h2, h3, h4, h5, h6 {
+    &:before {
+      content: '#';
+      margin-right: 10px;
+      color: $white-a50;
+    }
+  }
+
+
+  p, h1, h2, h3, h4, h5, h6 {
+    line-height: 1.6;
+    margin: 1.4em 0;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  ol, ul {
+    list-style-position: inside;
+  }
+
+  li {
+    line-height: 1.6;
+    font-size: 14px;
+  }
+
+  b, strong {
+    font-weight: 900;
+    color: $maya-blue;
+  }
 }

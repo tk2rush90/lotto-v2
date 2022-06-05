@@ -1,0 +1,61 @@
+@import "mixins";
+@import "props";
+
+// SelectResult.
+:host {
+  display: block;
+}
+
+// Space between repeat counter and section.
+.repeat-counter + section {
+  margin-top: 30px;
+}
+
+// Repeat counter for get until first prize.
+.repeat-counter {
+  @include flex(center, center);
+  font-size: 14px;
+  margin: 30px auto;
+  background-color: rgba($black, .5);
+  border-radius: 4px;
+  width: 100%;
+  height: 40px;
+  max-width: 350px;
+}
+
+// Space between sections.
+section + section {
+  margin-top: 30px;
+}
+
+// Common container.
+.container {
+  background-color: $white-a20;
+}
+
+// Selected numbers container.
+.selected-numbers {
+  @include flex(center, center);
+  height: 80px;
+}
+
+// Space between balls.
+app-lotto-ball + app-lotto-ball {
+  margin-left: 10px;
+}
+
+// Statistics container.
+.statistics {
+  @include padding(20px);
+}
+
+// Rank result line.
+.rank {
+  @include flex(center, space-between);
+  font-size: 14px;
+}
+
+// Space between ranks.
+.rank + .rank {
+  margin-top: 20px;
+}

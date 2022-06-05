@@ -1,11 +1,12 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { InlineButtonDirective } from './inline-button.directive';
-
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {InlineButtonDirective} from './inline-button.directive';
 
 
 @NgModule({
-  declarations: [InlineButtonDirective],
+  declarations: [
+    InlineButtonDirective
+  ],
   exports: [
     InlineButtonDirective
   ],

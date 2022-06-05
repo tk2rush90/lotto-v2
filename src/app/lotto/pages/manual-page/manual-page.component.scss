@@ -1,0 +1,12 @@
+@import "mixins";
+@import "props";
+
+// Manual select page.
+:host {
+  display: block;
+}
+
+// Selected result.
+app-select-result {
+  margin-top: 30px;
+}

@@ -1,0 +1,14 @@
+@import "mixins";
+@import "props";
+
+// Footer.
+:host {
+  @include flex(center, center);
+  background-color: $black2;
+  height: 100px;
+}
+
+// Copyrights.
+p {
+  font-size: 12px;
+}

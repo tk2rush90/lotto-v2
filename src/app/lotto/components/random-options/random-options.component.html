@@ -1,0 +1,6 @@
+<!-- Render options. -->
+<app-random-option
+  (click)="setValue(option.value)"
+  *ngFor="let option of options"
+  [data]="option"
+  [selected]="option.value === value"></app-random-option>

@@ -1,0 +1,39 @@
+@import "mixins";
+@import "props";
+
+// NumberStatistic.
+:host {
+  @include flex(center);
+}
+
+// Font size for number and count.
+.number, .count {
+  font-size: 14px;
+}
+
+// The number.
+.number {
+  width: 30px;
+}
+
+// Bar container.
+.bar-container {
+  // Reduce number width, count width, and margins.
+  width: calc(100% - 30px - 20px - 50px);
+  height: 5px;
+  margin: 0 10px;
+}
+
+// Bar.
+.bar {
+  border-radius: 5px;
+  height: 100%;
+  width: 0;
+  background-color: $white-a50;
+}
+
+// Count.
+.count {
+  text-align: right;
+  width: 50px;
+}

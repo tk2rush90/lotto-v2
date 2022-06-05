@@ -1,0 +1,11 @@
+<!-- Starting round. -->
+<app-search-select
+  (ngModelChange)="updateStartValue($event)"
+  [ngModel]="start"
+  [options]="startingRoundOptions"></app-search-select>
+
+<!-- Ending round. -->
+<app-search-select
+  (ngModelChange)="updateEndValue($event)"
+  [ngModel]="end"
+  [options]="endingRoundOptions"></app-search-select>

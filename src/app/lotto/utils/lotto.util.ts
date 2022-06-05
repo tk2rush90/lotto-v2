@@ -1,310 +1,292 @@
 import {LottoResult} from '@lotto/models/lotto-result';
-import {LottoProbability} from '@lotto/models/lotto-probability';
-import {ParsingUtil} from '@tk-ui/utils/parsing.util';
-import {OccurrenceStatistic} from '@lotto/models/occurrence-statistic';
-import {ChosenStatisticsSort} from '@lotto/services/common/lotto.service';
-import {SortUtil} from '@tk-ui/utils/sort.util';
-import {WinningResult} from '@lotto/models/winning-result';
+import {ObjectUtil} from '@tk-ui/utils/object.util';
+import {LoggerUtil} from '@tk-ui/utils/logger.util';
+import {ObjectMap} from '@tk-ui/others/types';
 
+/**
+ * The ball color for number.
+ * - yellow: 1 to 10
+ * - blue: 11 to 20
+ * - red: 21 to 30
+ * - grey: 31 to 40
+ * - green: 41 to 45
+ */
+export type BallColor = 'yellow' | 'blue' | 'red' | 'grey' | 'green';
+
+/**
+ * Interface to create balls to the view for numbers.
+ */
+export interface LottoBall {
+  /**
+   * The value of selected number.
+   */
+  value: number;
+
+  /**
+   * The ball color for selected number.
+   */
+  color: BallColor;
+}
+
+/**
+ * The result object for getting occurrences.
+ */
+export interface LottoOccurrenceResult {
+  /**
+   * Occurrence number array.
+   * Each index indicates lotto number.
+   * Each value indicates occurrence counts.
+   */
+  occurrences: number[];
+
+  /**
+   * The total occurrence
+   */
+  total: number;
+}
+
+/**
+ * The utilities for lotto.
+ * The methods that are not depended on `LottoHistoryService` are in here.
+ */
 export class LottoUtil {
   /**
-   * Get whole lotto numbers.
+   * Logger.
    */
-  static getNumbers(): number[] {
-    const numbers = [];
+  private static _logger = LoggerUtil.createLogger(this);
 
-    for (let i = 1; i <= 45; i++) {
-      numbers.push(i);
+  /**
+   * Get the counter array for chances or occurrence counter.
+   */
+  static get counterArray(): number[] {
+    return new Array(45).fill(0, 0, 45);
+  }
+
+  /**
+   * Create an array of `LottoBall` to display balls.
+   * @param numbers - The numbers to create balls.
+   */
+  static createBalls(numbers: number[]): LottoBall[] {
+    return numbers.map(num => {
+      let color: BallColor;
+
+      if (num > 0 && num < 11) {
+        color = 'yellow';
+      } else if (num > 10 && num < 21) {
+        color = 'blue';
+      } else if (num > 20 && num < 31) {
+        color = 'red';
+      } else if (num > 30 && num < 41) {
+        color = 'grey';
+      } else {
+        color = 'green';
+      }
+
+      return {
+        color,
+        value: num,
+      };
+    });
+  }
+
+  /**
+   * Get random numbers with normal chances.
+   */
+  static getRandomNumbers(): number[] {
+    this._logger.debug('Start select numbers with random chances');
+
+    const selectedNumbers: number[] = [];
+
+    while (selectedNumbers.length < 6) {
+      const chances = this._getNormalChances(selectedNumbers);
+
+      this._logger.debug('Random chances', chances);
+
+      selectedNumbers.push(this._selectNumberWithChances(chances));
+
+      this._logger.debug('Selected numbers', selectedNumbers);
     }
 
-    return numbers;
+    return selectedNumbers;
   }
 
   /**
-   * Get the default probabilities according to previous occurrences.
-   * @param results Results to calculate probabilities.
-   * @param numbers Numbers that can be chosen. Default is all lotto numbers.
+   * Get the numbers with the most weighted chances.
+   * @param results - The previous results for reference.
+   * @param includeBonus - Set `true` to use bonus value when calculating.
    */
-  static getDefaultProbabilities(results: LottoResult[], numbers = this.getNumbers()): LottoProbability {
-    const {total, occurrence} = this.getNumberOccurrences(results, numbers);
+  static getMostWeightedNumbers(results: LottoResult[], includeBonus: boolean): number[] {
+    this._logger.debug('Start select numbers with most weighted chances');
 
-    // Calculate the probabilities.
-    numbers.forEach((item, index) => {
-      occurrence[item] = occurrence[item] / total;
+    const selectedNumbers: number[] = [];
 
-      // If the last number, set the probability to `1`.
-      if (index === numbers.length - 1) {
-        occurrence[item] = 1;
-      }
-    });
+    while (selectedNumbers.length < 6) {
+      const chances = this._getWeightedChances(results, includeBonus, false, selectedNumbers);
 
-    return occurrence;
+      this._logger.debug('Most weighted chances', chances);
+
+      selectedNumbers.push(this._selectNumberWithChances(chances));
+
+      this._logger.debug('Selected numbers', selectedNumbers);
+    }
+
+    return selectedNumbers;
   }
 
   /**
-   * Get the weighted probability of each number from the results.
-   * It assumes that the probability of each number converges to normal probability.
-   * So when the current probability is less than normal, give more weight,
-   * on the other hand, when the current probability is more than normal, give less weight.
-   * @param results Lotto results.
-   * @param numbers
-   * The numbers that can be chosen. Each number should be chosen as independent.
-   * So the numbers array should be different on every choosing.
-   * Default is all lotto numbers.
+   * Get the numbers with the least weighted chances.
+   * @param results - The previous results for reference.
+   * @param includeBonus - Set `true` to use bonus value when calculating.
    */
-  static getWeighted1Probabilities(results: LottoResult[], numbers = this.getNumbers()): LottoProbability {
-    const {total, occurrence} = this.getNumberOccurrences(results, numbers);
+  static getLeastWeightedNumbers(results: LottoResult[], includeBonus: boolean): number[] {
+    this._logger.debug('Start select numbers with least weighted chances');
 
-    // Normal probability of each number.
-    const normalProbability = 1 / numbers.length;
+    const selectedNumbers: number[] = [];
 
-    // Calculate the weighted probabilities.
-    numbers.forEach((item, index) => {
-      const currentProbability = occurrence[item] / total;
-      const diff = normalProbability - currentProbability;
+    while (selectedNumbers.length < 6) {
+      const chances = this._getWeightedChances(results, includeBonus, true, selectedNumbers);
 
-      // Multiply diff to give more weight.
-      occurrence[item] = currentProbability + (diff * 2);
+      this._logger.debug('Least weighted chances', chances);
 
-      // If the last number, set the probability to `1`.
-      // Each number can be chosen by the result of `Math.random()`,
-      // so the last number should be `1`.
-      // And if the number is not first number, add previous probability to
-      // calculate the probability range between previous and current number.
-      if (index === numbers.length - 1) {
-        occurrence[item] = 1;
-      } else if (index !== 0) {
-        occurrence[item] += occurrence[numbers[index - 1]];
-      }
-    });
+      selectedNumbers.push(this._selectNumberWithChances(chances));
 
-    return occurrence;
+      this._logger.debug('Selected numbers', selectedNumbers);
+    }
+
+    return selectedNumbers;
   }
 
   /**
-   * Get the weighted probability of each number from the results.
-   * More often appeared numbers will have more chance to be picked.
-   * @param results Lotto results.
-   * @param numbers
-   * The numbers that can be chosen. Each number should be chosen as independent.
-   * So the numbers array should be different on every choosing.
-   * Default is all lotto numbers.
+   * Get occurrence counts and total occurrence.
+   * @param results - The result for reference.
+   * @param includeBonus - Set `true` to count bonus value as well.
+   * @param excludedMap - The map of excluded numbers that aren't counted.
    */
-  static getWeighted2Probabilities(results: LottoResult[], numbers = this.getNumbers()): LottoProbability {
-    const {total, occurrence} = this.getNumberOccurrences(results, numbers);
-
-    // Calculate the weighted probabilities.
-    numbers.forEach((item, index) => {
-      occurrence[item] = occurrence[item] / total;
-
-      // If the last number, set the probability to `1`.
-      // Each number can be chosen by the result of `Math.random()`,
-      // so the last number should be `1`.
-      // And if the number is not first number, add previous probability to
-      // calculate the probability range between previous and current number.
-      if (index === numbers.length - 1) {
-        occurrence[item] = 1;
-      } else if (index !== 0) {
-        occurrence[item] += occurrence[numbers[index - 1]];
-      }
-    });
-
-    return occurrence;
-  }
-
-  /**
-   * Get the number occurrences with total counts.
-   * @param results Results to calculate occurrences.
-   * @param numbers Numbers that can be chosen. Default is all lotto numbers.
-   */
-  static getNumberOccurrences(results: LottoResult[], numbers = this.getNumbers()): {
-    total: number;
-    // Use same model with probability.
-    occurrence: LottoProbability;
-  } {
-    const probability: LottoProbability = {};
-
-    // Create map for numbers then loop the results to count each number.
-    // The `total` is total counts of mapped numbers.
-    // This will be used to get normal probability of each number.
+  static getOccurrenceCounts(results: LottoResult[], includeBonus: boolean, excludedMap: ObjectMap<boolean> = {}): LottoOccurrenceResult {
     let total = 0;
+    const occurrences = this.counterArray;
 
-    numbers.forEach(item => probability[item] = 0);
-    results.forEach(item => {
-      item.numbers.forEach(num => {
-        if (probability.hasOwnProperty(num)) {
-          probability[num]++;
+    // Count total number occurrences and each number occurrence.
+    // Count bonus number as well when `includeBonus` is `true`.
+    results.forEach(result => {
+      result.numbers.forEach(num => {
+        if (!excludedMap[num]) {
+          // Reduce `1` to transform to index.
+          occurrences[num - 1]++;
           total++;
         }
       });
 
-      if (probability.hasOwnProperty(item.bonus)) {
-        probability[item.bonus]++;
-        total++;
+      if (includeBonus) {
+        if (!excludedMap[result.bonus]) {
+          // Reduce `1` to transform to index.
+          occurrences[result.bonus - 1]++;
+          total++;
+        }
       }
     });
 
     return {
       total,
-      occurrence: probability,
+      occurrences,
     };
   }
 
   /**
-   * Get the winnings result with selected numbers.
-   * The result is number array that contains the counts of `1st prize` to `5th prize`.
-   * @param results Historical winning results.
-   * @param numbers Selected numbers.
+   * Get the chances which are equal to all numbers.
+   * @param excludedNumbers - The numbers that are excluded.
    */
-  static getWinningResults(results: LottoResult[], numbers: number[]): number[] {
-    // Winnings array.
-    // Most left number is the count of `1st prize`, most right number is the count of `5th prize`.
-    const winnings: number[] = [0, 0, 0, 0, 0];
-    const selectedMap: { [k: number]: number } = {};
+  private static _getNormalChances(excludedNumbers: number[]): number[] {
+    const chances = this.counterArray;
+    const chance = 1 / (45 - excludedNumbers.length);
+    const excludedMap = ObjectUtil.getUniqueKeys(excludedNumbers);
 
-    // Transform selected numbers array to map.
-    numbers.forEach(item => selectedMap[item] = item);
+    for (let i = 0; i < chances.length; i++) {
+      const previousChance = chances[i - 1] || 0;
 
-    results.forEach(item => {
-      const matched = this._getMatchedCounts(item, selectedMap);
-
-      if (matched.matched === 6) {
-        winnings[0]++;
-      } else if (matched.matched === 5 && matched.bonus) {
-        winnings[1]++;
-      } else if (matched.matched === 5) {
-        winnings[2]++;
-      } else if (matched.matched === 4) {
-        winnings[3]++;
-      } else if (matched.matched === 3) {
-        winnings[4]++;
-      }
-    });
-
-    return winnings;
-  }
-
-  /**
-   * Get the statistics of number occurrences.
-   * @param results Historical lotto results.
-   */
-  static getNumberOccurrenceStatistics(results: LottoResult[]): OccurrenceStatistic[] {
-    const occurrences: OccurrenceStatistic[] = [];
-    const {total, occurrence} = LottoUtil.getNumberOccurrences(results);
-
-    Object.keys(occurrence).forEach(key => {
-      const num = ParsingUtil.toInteger(key);
-      const count = occurrence[num];
-      const _occurrence: OccurrenceStatistic = {
-        count,
-        number: num,
-        // The occurrence will be calculated after.
-        occurrence: 0,
-        probability: count / total * 100,
-      };
-
-      occurrences.push(_occurrence);
-    });
-
-    // Calculate occurrences.
-    const max = Math.max(...occurrences.map(item => item.count));
-
-    occurrences.forEach(item => item.occurrence = item.count / max * 100);
-
-    return occurrences;
-  }
-
-  /**
-   * Sort the occurrences by sort field.
-   * @param occurrences Occurrence statistics.
-   * @param sort Sort field.
-   */
-  static sortOccurrenceStatistics(occurrences: OccurrenceStatistic[], sort: ChosenStatisticsSort): OccurrenceStatistic[] {
-    let sortFunction;
-
-    switch (sort) {
-      case 'number': {
-        sortFunction = SortUtil.sortMethodWithOrderByColumn<OccurrenceStatistic>({
-          property: 'number',
-          order: 'asc',
-          type: 'number',
-        });
-
-        break;
-      }
-
-      case 'occurrence': {
-        sortFunction = SortUtil.sortMethodWithOrderByColumn<OccurrenceStatistic>({
-          property: 'occurrence',
-          order: 'desc',
-          type: 'number',
-        });
+      // Transform index to a number.
+      // Calculate chance range when the number is not excluded.
+      if (excludedMap[i + 1]) {
+        chances[i] = previousChance;
+      } else {
+        chances[i] = previousChance + chance;
       }
     }
 
-    return occurrences.sort(sortFunction);
+    return this._getCorrectedChances(chances);
   }
 
   /**
-   * Get the detailed winning results.
-   * @param results Lotto results.
-   * @param numbers Selected numbers.
+   * Get the weighted chances.
+   * @param results - The previous results for reference.
+   * @param includeBonus - Set `true` to use bonus value when calculating.
+   * @param leastWeighted - Set `true` to adjust the chance with least weighted.
+   * @param excludedNumbers - The numbers that are excluded.
    */
-  static getDetailedWinningResults(results: LottoResult[], numbers: number[]): WinningResult[] {
-    const winnings: WinningResult[] = [];
-    const selectedMap: { [k: number]: number } = {};
+  private static _getWeightedChances(results: LottoResult[], includeBonus: boolean, leastWeighted: boolean, excludedNumbers: number[]): number[] {
+    // Calculate the most weighted chances.
+    // The `total` is total number occurrence.
+    // The `occurrences` will count occurrence for each number,
+    // then calculate the weighted chance and set to `chances`.
+    // The `randomChance` is default chance without any weights.
+    const chances = this.counterArray;
+    const randomChance = 1 / 45;
+    const excludedMap = ObjectUtil.getUniqueKeys(excludedNumbers);
+    const {total, occurrences} = this.getOccurrenceCounts(results, includeBonus, excludedMap);
 
-    // Transform selected numbers array to map.
-    numbers.forEach(item => selectedMap[item] = item);
+    // Calculate chances.
+    occurrences.forEach((count, index) => {
+      const previousChance = chances[index - 1] || 0;
 
-    results.forEach(item => {
-      let prize: number | undefined = undefined;
-      const matched = this._getMatchedCounts(item, selectedMap);
+      // Transform index to a number.
+      // Calculate chance range when the number is not excluded.
+      if (excludedMap[index + 1]) {
+        chances[index] = previousChance;
+      } else {
+        const chance = count / total;
 
-      if (matched.matched === 6) {
-        prize = 1;
-      } else if (matched.matched === 5 && matched.bonus) {
-        prize = 2;
-      } else if (matched.matched === 5) {
-        prize = 3;
-      } else if (matched.matched === 4) {
-        prize = 4;
-      } else if (matched.matched === 3) {
-        prize = 5;
+        // When `leastWeighted` is `true`, add more chance to a number
+        // which has less occurred than `randomChance`.
+        if (leastWeighted) {
+          const differ = randomChance - chance;
+
+          chances[index] = previousChance + randomChance + differ;
+        } else {
+          chances[index] = previousChance + chance;
+        }
       }
-
-      winnings.push({
-        result: item,
-        matched: selectedMap,
-        prize,
-      });
     });
 
-    return winnings;
+    return this._getCorrectedChances(chances);
   }
 
   /**
-   * Get the matched counts of selected numbers for result.
-   * @param result The lotto result to check matched count.
-   * @param selectedMap The map of selected numbers.
+   * Correct the chances array to make chances to be within 0 to 1.
+   * @param chances - Chances to correct.
    */
-  private static _getMatchedCounts(result: LottoResult, selectedMap: { [k: number]: number }): {
-    matched: number;
-    bonus: boolean;
-  } {
-    const matched = {
-      matched: 0,
-      bonus: false,
-    };
+  private static _getCorrectedChances(chances: number[]): number[] {
+    // Get maximum value of chances to correct the chances to be within 0 to 1.
+    const maximumChance = chances[chances.length - 1];
 
-    result.numbers.forEach(item => {
-      if (selectedMap[item]) {
-        matched.matched++;
-      }
+    return chances.map(chance => {
+      // Correct the chances.
+      return chance * (1 / maximumChance);
+    });
+  }
+
+  /**
+   * Select a number with chances.
+   * @param chances - The chances for each number.
+   */
+  private static _selectNumberWithChances(chances: number[]): number {
+    const random = Math.random();
+    const num = chances.findIndex((chance, index) => {
+      const previous = chances[index - 1] || 0;
+
+      return previous <= random && random < chance;
     });
 
-    matched.bonus = !!selectedMap[result.bonus];
-
-    return matched;
+    // Transform index to a number.
+    return num + 1;
   }
 }

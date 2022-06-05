@@ -1,0 +1,42 @@
+@import "mixins";
+@import "props";
+
+// NoticeDetail.
+:host {
+  @include flex(stretch, null, column);
+  max-width: 650px;
+  height: 100%;
+  max-height: 600px;
+  overflow: auto;
+}
+
+// Modal header.
+.modal-header {
+  @include flex(center, space-between);
+  @include padding(20px);
+
+  // Title in header.
+  .title {
+    line-height: 1.6;
+    font-size: 20px;
+    font-weight: 700;
+    // Reduce close width and margin.
+    width: calc(100% - 24px - 10px);
+  }
+
+  // Close icon.
+  app-icon {
+    @include box(24px);
+    margin-left: 10px;
+    cursor: pointer;
+    user-select: none;
+  }
+}
+
+// Contents container.
+.contents {
+  @include padding(0 20px);
+  overflow: auto;
+  flex: 1 1 0;
+}
+

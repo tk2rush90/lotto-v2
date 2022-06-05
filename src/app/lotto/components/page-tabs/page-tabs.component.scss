@@ -1,0 +1,24 @@
+@import "mixins";
+@import "props";
+
+// Tabs container.
+:host {
+  @include flex(center);
+  @include border-bottom(1px solid $white);
+  height: 50px;
+}
+
+// Anchor style.
+a {
+  @include flex(center);
+  @include padding(0 15px);
+  height: 100%;
+  font-size: 14px;
+  color: $white-a50;
+
+  // On activated.
+  &.active {
+    color: $white;
+  }
+}
+

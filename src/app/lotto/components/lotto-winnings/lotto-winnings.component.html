@@ -1,0 +1,5 @@
+<!-- Render LottoWinning list. -->
+<app-lotto-winning
+  *ngFor="let result of displayingResults; trackBy: roundTrackBy"
+  [result]="result"
+  [selectedNumbersMap]="selectedNumbersMap"></app-lotto-winning>

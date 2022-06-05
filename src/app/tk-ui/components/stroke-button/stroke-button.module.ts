@@ -1,11 +1,12 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { StrokeButtonDirective } from './stroke-button.directive';
-
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {StrokeButtonDirective} from './stroke-button.directive';
 
 
 @NgModule({
-  declarations: [StrokeButtonDirective],
+  declarations: [
+    StrokeButtonDirective
+  ],
   exports: [
     StrokeButtonDirective
   ],

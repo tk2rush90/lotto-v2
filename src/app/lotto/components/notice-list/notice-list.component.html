@@ -1,0 +1,47 @@
+<!-- Modal header. -->
+<div class="modal-header">
+  <!-- Title. -->
+  <h3>
+    공지사항
+  </h3>
+
+  <!-- Close icon. -->
+  <app-icon
+    (click)="close()"
+    name="close:white"></app-icon>
+</div>
+
+<!-- Table container. -->
+<div class="table-container">
+  <!-- Use `<div>` like `<table>` with classes. -->
+  <div class="table">
+    <!-- Head. -->
+    <div class="head">
+      <div class="tr">
+        <div class="th">
+          제목
+        </div>
+
+        <div class="th">
+          날짜
+        </div>
+      </div>
+    </div>
+
+    <!-- Body. -->
+    <div class="body">
+      <a
+        (click)="openNotice(notice)"
+        *ngFor="let notice of notices"
+        class="tr">
+        <div class="td">
+          {{notice.title}}
+        </div>
+
+        <div class="td">
+          {{notice.noticeDate | date: 'yyyy-MM-dd'}}
+        </div>
+      </a>
+    </div>
+  </div>
+</div>

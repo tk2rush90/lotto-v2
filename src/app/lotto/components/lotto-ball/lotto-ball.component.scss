@@ -1,0 +1,41 @@
+@import "mixins";
+@import "props";
+
+// LottoBall.
+:host {
+  @include ball(35px);
+  @include flex(center, center);
+  color: $black;
+  font-size: 14px;
+  text-align: center;
+
+  // Yellow color.
+  @include attr('color', 'yellow') {
+    background-color: $golden-poppy;
+  }
+
+  // Blue color.
+  @include attr('color', 'blue') {
+    background-color: $maya-blue;
+  }
+
+  // Red color.
+  @include attr('color', 'red') {
+    background-color: $salmon;
+  }
+
+  // Grey color.
+  @include attr('color', 'grey') {
+    background-color: $dark-grey;
+  }
+
+  // Green color.
+  @include attr('color', 'green') {
+    background-color: $conifer;
+  }
+
+  &.disabled {
+    background-color: $white-a20;
+    color: $white;
+  }
+}

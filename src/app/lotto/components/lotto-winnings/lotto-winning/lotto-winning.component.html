@@ -1,0 +1,20 @@
+<!-- The round number. -->
+<div class="round">
+  {{round}}회
+</div>
+
+<!-- The container for balls. -->
+<div class="balls">
+  <!-- Render winning balls. -->
+  <app-lotto-ball
+    *ngFor="let ball of winningBalls"
+    [data]="ball"
+    [disabled]="!selectedNumbersMap[ball.value]"></app-lotto-ball>
+
+  <app-icon name="add:white"></app-icon>
+
+  <!-- Bonus ball. -->
+  <app-lotto-ball
+    [data]="bonusBall"
+    [disabled]="!selectedNumbersMap[bonusBall.value]"></app-lotto-ball>
+</div>

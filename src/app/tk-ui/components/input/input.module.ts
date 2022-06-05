@@ -1,18 +1,17 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { InputDirective } from './input.directive';
-import {FormControlBaseModule} from '@tk-ui/components/form-control-base/form-control-base.module';
-
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {InputDirective} from './input.directive';
 
 
 @NgModule({
-  declarations: [InputDirective],
+  declarations: [
+    InputDirective
+  ],
   exports: [
     InputDirective
   ],
   imports: [
-    CommonModule,
-    FormControlBaseModule,
+    CommonModule
   ]
 })
 export class InputModule { }

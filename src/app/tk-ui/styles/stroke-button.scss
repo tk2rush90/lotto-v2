@@ -1,33 +1,61 @@
 @import "mixins";
 @import "props";
 
-@mixin stroke-button($color, $border-color, $font-color, $hover-background, $active-background) {
-  @include attribute-styles('tk-color', $color) {
-    @include border(1px solid $border-color);
-    @include padding(0 10px);
-    color: $font-color;
-
-    &:not(:disabled) {
-      @include clickable();
-
-      &:hover {
-        background-color: $hover-background;
-      }
-
-      &:active {
-        background-color: $active-background;
-      }
-    }
-
-    // additional content
+@mixin disabled {
+  &:disabled {
     @content;
   }
 }
 
-// stroke button
-.tk-stroke-button {
-  @include flex(center, center);
+@mixin hover {
+  &:not(:disabled) {
+    &:hover {
+      @content;
+    }
+  }
+}
 
-  // for 'grey' button
-  @include stroke-button('default', #BEBEBE, #BEBEBE, #F3F3F3, darken(#F3F3F3, 5%));
+@mixin active {
+  &:not(:disabled) {
+    &:active {
+      @content;
+    }
+  }
+}
+
+@mixin focus {
+  &:not(:disabled) {
+    &:focus {
+      @content;
+    }
+  }
+}
+
+.tk-stroke-button {
+  // Common styles for flat button.
+  @include padding(0 10px);
+  height: 30px;
+  cursor: pointer;
+  user-select: none;
+
+  // Set customized styles by its color.
+  @include attr('tk-color', '') {
+    @include border(1px solid black);
+
+    @include disabled {
+
+    }
+
+    @include hover {
+
+    }
+
+    @include active {
+
+    }
+
+    @include focus {
+
+    }
+  }
 }

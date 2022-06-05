@@ -1,19 +1,29 @@
-import {Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, HostBinding, OnInit} from '@angular/core';
 import {
   ActivationEnd,
-  ActivationStart, ChildActivationEnd,
+  ActivationStart,
+  ChildActivationEnd,
   ChildActivationStart,
   GuardsCheckEnd,
   GuardsCheckStart,
-  NavigationStart, ResolveEnd, ResolveStart,
+  NavigationCancel,
+  NavigationEnd,
+  NavigationError,
+  NavigationStart,
+  ResolveEnd,
+  ResolveStart,
   RouteConfigLoadEnd,
   RouteConfigLoadStart,
   Router,
   RoutesRecognized
 } from '@angular/router';
 import {SubscriptionService} from '@tk-ui/services/common/subscription.service';
-import {Animator} from '@tk-ui/utils/animation.util';
+import {animate, AnimationEvent, state, style, transition, trigger} from '@angular/animations';
 
+/**
+ * This will show progress bar according to router progress.
+ * It should be placed on the Application root.
+ */
 @Component({
   selector: 'app-router-progress',
   templateUrl: './router-progress.component.html',
@@ -21,125 +31,138 @@ import {Animator} from '@tk-ui/utils/animation.util';
   providers: [
     SubscriptionService,
   ],
+  animations: [
+    trigger('progress', [
+      state('void', style({ width: '0' })),
+      state('NavigationStart', style({ width: 'calc(100% / 12 * 1)' })),
+      state('RouteConfigLoadStart', style({ width: 'calc(100% / 12 * 2)' })),
+      state('RouteConfigLoadEnd', style({ width: 'calc(100% / 12 * 3)' })),
+      state('RoutesRecognized', style({ width: 'calc(100% / 12 * 4)' })),
+      state('GuardsCheckStart', style({ width: 'calc(100% / 12 * 5)' })),
+      state('ChildActivationStart', style({ width: 'calc(100% / 12 * 6)' })),
+      state('ActivationStart', style({ width: 'calc(100% / 12 * 7)' })),
+      state('GuardsCheckEnd', style({ width: 'calc(100% / 12 * 8)' })),
+      state('ResolveStart', style({ width: 'calc(100% / 12 * 9)' })),
+      state('ResolveEnd', style({ width: 'calc(100% / 12 * 10)' })),
+      state('ChildActivationEnd', style({ width: 'calc(100% / 12 * 11)' })),
+      state('ActivationEnd', style({ width: 'calc(100% / 12 * 12)' })),
+      state('done', style({ width: 'calc(100% / 12 * 12)' })),
+      transition('* => NavigationStart', animate('.15s')),
+      transition('* => RouteConfigLoadStart', animate('.15s')),
+      transition('* => RouteConfigLoadEnd', animate('.15s')),
+      transition('* => RoutesRecognized', animate('.15s')),
+      transition('* => GuardsCheckStart', animate('.15s')),
+      transition('* => ChildActivationStart', animate('.15s')),
+      transition('* => ActivationStart', animate('.15s')),
+      transition('* => GuardsCheckEnd', animate('.15s')),
+      transition('* => ResolveStart', animate('.15s')),
+      transition('* => ResolveEnd', animate('.15s')),
+      transition('* => ChildActivationEnd', animate('.15s')),
+      transition('* => ActivationEnd', animate('.15s')),
+      transition('* => done', animate('.15s')),
+      transition('* => void', animate('0s')),
+    ]),
+    trigger('fade-out', [
+      state('void', style({ opacity: 0 })),
+      state('show', style({ opacity: 1 })),
+      transition('* => show', animate('0s')),
+      transition('* => void', animate('.3s')),
+    ]),
+  ],
 })
-export class RouterProgressComponent implements OnInit, OnDestroy {
+export class RouterProgressComponent implements OnInit {
   /**
-   * bind width
+   * State of `progress` animation.
    */
-  @HostBinding('style.width') get width(): string {
-    return this._progress + '%';
-  }
+  progress = 'void';
 
   /**
-   * bind opacity
+   * State of `fade-out` animation.
    */
-  @HostBinding('style.opacity') get opacity(): number {
-    return this._opacity;
-  }
-
-  /**
-   * progress animator
-   */
-  private _progressAnimator = new Animator();
-
-  /**
-   * opacity animator
-   */
-  private _opacityAnimator = new Animator();
-
-  /**
-   * opacity
-   */
-  private _opacity = 0;
-
-  /**
-   * progress percentage
-   */
-  private _progress = 0;
-
-  /**
-   * timeout timer
-   */
-  private _timer: any;
-
-  private _navigations = [
-    NavigationStart,
-    RouteConfigLoadStart,
-    RouteConfigLoadEnd,
-    RoutesRecognized,
-    GuardsCheckStart,
-    ChildActivationStart,
-    ActivationStart,
-    GuardsCheckEnd,
-    ResolveStart,
-    ResolveEnd,
-    ChildActivationEnd,
-    ActivationEnd,
-  ];
-
-  /**
-   * progress step level
-   */
-  private _step = 100 / this._navigations.length;
+  fadeOut = 'void';
 
   constructor(
     private router: Router,
+    private changeDetectorRef: ChangeDetectorRef,
     private subscriptionService: SubscriptionService,
   ) {
   }
 
-  ngOnInit(): void {
-    this._subscribeRouterEvents();
+  /**
+   * Bind progressing state to class to display track background color.
+   */
+  @HostBinding('class.tk-progressing')
+  get progressing(): boolean {
+    return this.progress !== 'void';
   }
 
-  ngOnDestroy(): void {
-    clearTimeout(this._timer);
-    this._opacityAnimator.cancel();
-    this._progressAnimator.cancel();
+  ngOnInit(): void {
+    this._subscribeRouterEvent();
   }
 
   /**
-   * subscribe router events
+   * Hide the progress bar by setting `fadeOut` as `void` when `progress` animation to `done` state has done.
+   * @param event - The `AnimationEvent`.
    */
-  private _subscribeRouterEvents(): void {
+  onProgressDone(event: AnimationEvent): void {
+    if (event.toState === 'done') {
+      this.fadeOut = 'void';
+    }
+  }
+
+  /**
+   * Reset the progress bar by setting `progress` as `void` when `fade-out` animation to `void` state has done.
+   * @param event - The `AnimationEvent`.
+   */
+  onFadeOutDone(event: AnimationEvent): void {
+    if (event.toState === 'void') {
+      this.progress = 'void';
+    }
+  }
+
+  /**
+   * Subscribe router event to animate progress bar.
+   */
+  private _subscribeRouterEvent(): void {
     const sub = this.router.events
-      .subscribe(res => {
-        const index = this._navigations.findIndex(navigation => res instanceof navigation);
-
-        if (index === 0) {
-          this._opacityAnimator.cancel();
-          this._opacity = 1;
-          this._progress = 0;
-        } else {
-          const target = (index === -1) ? 100 : this._step * (index + 1);
-
-          this._progressAnimator.animate({
-            start: this._progress,
-            target,
-            duration: 150,
-            onProgress: value => {
-              console.log(value);
-
-              this._progress = value;
-            },
-            onEnd: () => this._hideProgressBar(),
-          });
+      .subscribe(event => {
+        if (event instanceof NavigationStart) {
+          this.fadeOut = 'show';
+          this.progress = 'NavigationStart';
+        } else if (event instanceof RouteConfigLoadStart) {
+          this.progress = 'RouteConfigLoadStart';
+        } else if (event instanceof RouteConfigLoadEnd) {
+          this.progress = 'RouteConfigLoadEnd';
+        } else if (event instanceof RoutesRecognized) {
+          this.progress = 'RoutesRecognized';
+        } else if (event instanceof GuardsCheckStart) {
+          this.progress = 'GuardsCheckStart';
+        } else if (event instanceof ChildActivationStart) {
+          this.progress = 'ChildActivationStart';
+        } else if (event instanceof ActivationStart) {
+          this.progress = 'ActivationStart';
+        } else if (event instanceof GuardsCheckEnd) {
+          this.progress = 'GuardsCheckEnd';
+        } else if (event instanceof ResolveStart) {
+          this.progress = 'ResolveStart';
+        } else if (event instanceof ResolveEnd) {
+          this.progress = 'ResolveEnd';
+        } else if (event instanceof ChildActivationEnd) {
+          this.progress = 'ChildActivationEnd';
+        } else if (event instanceof ActivationEnd) {
+          this.progress = 'ActivationEnd';
+        } else if (
+          event instanceof NavigationEnd
+          || event instanceof NavigationCancel
+          || event instanceof NavigationError
+        ) {
+          this.progress = 'done';
         }
+
+        // To prevent `NG0100` error from `progressing` getter.
+        this.changeDetectorRef.detectChanges();
       });
 
-    this.subscriptionService.store('_subscribeRouterEvents', sub);
-  }
-
-  /**
-   * hide progress bar
-   */
-  private _hideProgressBar(): void {
-    this._opacityAnimator.animate({
-      start: this._opacity,
-      target: 0,
-      delay: 150,
-      duration: 500,
-      onProgress: value => this._opacity = value,
-    });
+    this.subscriptionService.store('_subscribeRouterEvent', sub);
   }
 }

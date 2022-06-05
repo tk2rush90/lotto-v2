@@ -1,40 +1,33 @@
+@import "input";
+@import "ripple";
+@import "flat-button";
+@import "inline-button";
+@import "stroke-button";
+@import "modal";
+
+// Set default styles for all element.
 * {
   padding: 0;
   margin: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
-input, textarea, select {
-  // remove default appearance
-  border: none;
+// Remove default styles from button element.
+button {
+  outline: 0;
+  border: 0;
   background-color: transparent;
-
-  // remove focus outline
-  &:focus {
-    outline: none;
-  }
 }
 
+// Remove default styles from input and textarea.
+input, textarea, select {
+  outline: 0;
+  border: 0;
+  background-color: transparent;
+}
+
+// Set anchor default style.
 a {
   text-decoration: none;
   color: inherit;
-}
-
-button {
-  border: 0;
-  outline: 0;
-
-  &:not(:disabled) {
-    cursor: pointer;
-  }
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type=number] {
-  -moz-appearance: textfield;
 }

@@ -1,9 +1,9 @@
 export class PaginationUtil {
   /**
-   * get default pagination
-   * @param total total pages
-   * @param page current page (starts from `1`)
-   * @param display display count of pages at once
+   * Get default pagination.
+   * @param total - Total pages.
+   * @param page - Current page (starts from `1`).
+   * @param display - Display count of pages at once.
    */
   static getDefaultPagination(total: number, page: number, display: number): number[] {
     this._checkPageValidation(total, page);
@@ -12,10 +12,24 @@ export class PaginationUtil {
     const even = display % 2 === 0;
     const previous = even ? half - 1 : half;
 
-    let start = Math.max(1, page - previous);
+    let start: number
+    let length: number;
     const pages = [];
 
-    while (pages.length < display) {
+    if (total < display) {
+      start = 1;
+      length = total;
+    } else {
+      start = Math.max(1, page - previous);
+      length = Math.min(display, total - start + 1);
+
+      if (length < display) {
+        start = start + length - display;
+        length = display;
+      }
+    }
+
+    while (pages.length < length) {
       pages.push(start);
 
       start++;
@@ -25,10 +39,10 @@ export class PaginationUtil {
   }
 
   /**
-   * get row number pagination
-   * @param total total row length
-   * @param size page size
-   * @param page current page (starts from `1`)
+   * Get row number pagination.
+   * @param total - Total row length.
+   * @param size - Page size.
+   * @param page - Current page (starts from `1`).
    */
   static getRowNumberPagination(total: number, size: number, page: number): RowNumberPagination {
     const totalPage = Math.ceil(total / size);
@@ -42,12 +56,12 @@ export class PaginationUtil {
   }
 
   /**
-   * get ellipsis pagination
-   * @param total total pages
-   * @param page current page (starts from `1`)
-   * @param startDisplay display count for starting pages
-   * @param middleDisplay display count for middle pages
-   * @param endDisplay display count for ending pages
+   * Get ellipsis pagination.
+   * @param total - Total pages.
+   * @param page - Current page (starts from `1`).
+   * @param startDisplay - The display count for starting pages.
+   * @param middleDisplay - The display count for middle pages.
+   * @param endDisplay - The display count for ending pages.
    * @example
    * PaginationUtil.getEllipsisPagination(30, 1, 2, 5, 2); // {start: [1, 2, 3, 4, 5, 6, 7, 8], middle: [], end: [29, 30]}
    * PaginationUtil.getEllipsisPagination(30, 2, 2, 5, 2); // {start: [1, 2, 3, 4, 5, 6, 7, 8], middle: [], end: [29, 30]}
@@ -70,7 +84,7 @@ export class PaginationUtil {
     const pagination: EllipsisPagination = new EllipsisPagination();
 
     if (total <= startDisplay + middleDisplay + endDisplay + 1) {
-      // render only starts
+      // Render only starts.
       pagination.renderStartPages(total);
     } else {
       const middleHalf = Math.floor(middleDisplay / 2);
@@ -81,15 +95,15 @@ export class PaginationUtil {
       const middleEnd = Math.min(total, page + middleHalf);
 
       if (1 + startDisplay >= middleStart) {
-        // do not render middle
+        // Do not render middle.
         pagination.renderStartPages(startEdgeDisplay);
         pagination.renderEndPages(total, endDisplay);
       } else if (total - endDisplay <= middleEnd) {
-        // do not render middle
+        // Do not render middle.
         pagination.renderStartPages(startDisplay);
         pagination.renderEndPages(total, endEdgeDisplay);
       } else {
-        // render middle
+        // Render middle.
         pagination.renderStartPages(startDisplay);
         pagination.renderMiddlePages(middleStart, middleDisplay);
         pagination.renderEndPages(total, endDisplay);
@@ -100,9 +114,9 @@ export class PaginationUtil {
   }
 
   /**
-   * check page validation
-   * @param total total page
-   * @param page current page
+   * Check page validation.
+   * @param total - Total page.
+   * @param page - Current page.
    */
   private static _checkPageValidation(total: number, page: number): void {
     if (page > total || page < 1) {
@@ -112,43 +126,43 @@ export class PaginationUtil {
 }
 
 /**
- * row number pagination
+ * Row number pagination.
  */
 export interface RowNumberPagination {
   /**
-   * start row number
+   * Start row number.
    */
   start: number;
 
   /**
-   * end row number
+   * End row number.
    */
   end: number;
 }
 
 /**
- * ellipsis pagination
- * each pages are distinguished by ellipsis
+ * Ellipsis pagination.
+ * Each page is distinguished by ellipsis.
  */
 export class EllipsisPagination {
   /**
-   * starting pages
+   * Starting pages.
    */
   start: number[] = [];
 
   /**
-   * middle pages
+   * Middle pages.
    */
   middle: number[] = [];
 
   /**
-   * end pages
+   * End pages.
    */
   end: number[] = [];
 
   /**
-   * render start pages
-   * @param display display count of start
+   * Render start pages.
+   * @param display - The display count of start.
    */
   renderStartPages(display: number): void {
     let page = 1;
@@ -160,9 +174,9 @@ export class EllipsisPagination {
   }
 
   /**
-   * render middle pages
-   * @param start start page of middle
-   * @param display display count of middle
+   * Render middle pages.
+   * @param start - The start page of middle.
+   * @param display - The display count of middle.
    */
   renderMiddlePages(start: number, display: number): void {
     while (this.middle.length < display) {
@@ -172,9 +186,9 @@ export class EllipsisPagination {
   }
 
   /**
-   * render end pages
-   * @param total total pages
-   * @param display display count of end
+   * Render end pages.
+   * @param total - The total pages.
+   * @param display - The display count of end.
    */
   renderEndPages(total: number, display: number): void {
     while (this.end.length < display) {

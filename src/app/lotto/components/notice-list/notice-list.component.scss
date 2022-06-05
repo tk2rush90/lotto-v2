@@ -1,0 +1,80 @@
+@import "mixins";
+@import "props";
+
+// NoticeList.
+:host {
+  @include padding(20px);
+  display: block;
+  height: 100%;
+  max-height: 500px;
+}
+
+// Modal header.
+.modal-header {
+  @include flex(center, space-between);
+  height: 40px;
+
+  // Close icon.
+  app-icon {
+    @include box(24px);
+    cursor: pointer;
+    user-select: none;
+  }
+}
+
+// Table container to display scroll.
+.table-container {
+  position: relative;
+  // Reduce modal header height and margin.
+  height: calc(100% - 40px - 30px);
+  margin-top: 30px;
+  overflow: auto;
+}
+
+// Table.
+.table {
+  width: 100%;
+  font-size: 14px;
+}
+
+// Table head.
+.head {
+  @include border-bottom(1px solid $white);
+  @include top-left;
+  position: sticky;
+  background-color: $black;
+  z-index: 10;
+}
+
+// Table row.
+.tr {
+  @include flex(stretch);
+  height: 40px;
+}
+
+// Table head cell and body cell.
+.th, .td {
+  @include flex(center);
+  @include padding(0 10px);
+  @include ellipsis();
+  text-align: left;
+
+  &:first-child {
+    width: calc(100% - 100px);
+  }
+
+  &:nth-child(2) {
+    width: 100px;
+  }
+}
+
+// Anchor.
+a {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color .15s;
+
+  &:hover {
+    background-color: $white-a20;
+  }
+}

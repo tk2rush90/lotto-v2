@@ -1,0 +1,9 @@
+<!-- Render anchors. -->
+<a
+  *ngFor="let route of routes"
+  [routerLink]="route.routes"
+  routerLinkActive="active"
+  rippleColor="white"
+  appRipple>
+  {{route.name}}
+</a>

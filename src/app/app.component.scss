@@ -3,13 +3,39 @@
 
 // container
 :host {
+  @include box(100%);
+  position: absolute;
+  overflow: auto;
   display: block;
 }
 
-// loading cover
-app-loading-cover {
-  @include box(100%);
-  @include top-left;
-  position: fixed;
-  z-index: 100;
+// Main container wrapper.
+main {
+  // For space between footer.
+  @include padding-bottom(100px);
+  margin: 0 auto;
+  width: calc(100% - 20px);
+  max-width: 490px;
+  min-height: calc(100% - 100px);
+}
+
+// Header section.
+.header {
+  @include flex(center, null, column);
+  @include padding(75px 0 50px);
+
+  // Logo.
+  app-logo {
+    margin: 0 auto;
+  }
+}
+
+// Set space of page tabs.
+app-page-tabs {
+  margin-top: 30px;
+}
+
+// Router container.
+.router-container {
+  margin-top: 30px;
 }

@@ -1,21 +1,24 @@
 import {Directive, HostBinding, Input} from '@angular/core';
 
-export type InlineButtonColor = 'default';
+/**
+ * Available colors for inline button.
+ */
+export type InlineButtonColor = '';
 
+/**
+ * Directive to style inline button.
+ */
 @Directive({
   selector: '[appInlineButton]'
 })
 export class InlineButtonDirective {
   /**
-   * bind color attribute
+   * Bind button class.
    */
-  @Input() @HostBinding('attr.tk-color') color: InlineButtonColor = 'default';
+  @HostBinding('class.tk-inline-button') buttonClass = true;
 
   /**
-   * bind base class
+   * Set and bind the color for inline button.
    */
-  @HostBinding('class.tk-inline-button') baseClass = true;
-
-  constructor() { }
-
+  @Input() @HostBinding('attr.tk-color') color: InlineButtonColor = '';
 }

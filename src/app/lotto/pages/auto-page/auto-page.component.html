@@ -1,0 +1,64 @@
+<!-- Random strategy. -->
+<section>
+  <!-- Header. -->
+  <app-section-header>
+    추첨 방식
+  </app-section-header>
+
+  <!-- Random strategy options. -->
+  <app-random-options
+    [(ngModel)]="random"></app-random-options>
+</section>
+
+<!-- Round range. -->
+<section>
+  <!-- Header. -->
+  <app-section-header>
+    기간
+  </app-section-header>
+
+  <!-- Round range selector. -->
+  <app-range-selector
+    (ngModelChange)="onRangeChange($event)"
+    [ngModel]="range"></app-range-selector>
+
+  <!-- Checkbox for flag of whether select numbers until get first prize or not. -->
+  <div class="checkbox-container">
+    <label>1등 번호 추첨 시까지 추첨</label>
+    <app-checkbox
+      [(ngModel)]="selectUntilFirstPrize"
+      [bound]="false"
+      [centered]="true"
+      rippleColor="white"
+      appRipple></app-checkbox>
+  </div>
+
+  <!-- Checkbox for flag of whether use bonus number or not when calculating. -->
+  <div class="checkbox-container">
+    <label>보너스 번호 포함</label>
+    <app-checkbox
+      [(ngModel)]="includeBonus"
+      [bound]="false"
+      [centered]="true"
+      rippleColor="white"
+      appRipple></app-checkbox>
+  </div>
+</section>
+
+<!-- Actions section. -->
+<section class="actions">
+  <!-- Select button. -->
+  <button
+    (click)="selectNumbers()"
+    appFlatButton>
+    번호 추첨
+  </button>
+</section>
+
+<ng-container
+  *ngIf="hasSelectedNumbers">
+  <!-- Select result. -->
+  <app-select-result
+    [repeatCount]="repeatCount"
+    [selectedNumbers]="selectedNumbers"></app-select-result>
+</ng-container>

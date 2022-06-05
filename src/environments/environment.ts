@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  api: 'http://localhost:3000/lotto',
+  assets: '/assets',
+  host: 'http://localhost:4200',
+  api: 'https://tk2-backend.herokuapp.com/lotto',
 };
 
 /*

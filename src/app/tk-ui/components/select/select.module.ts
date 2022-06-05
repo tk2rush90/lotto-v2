@@ -1,25 +1,29 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { SelectComponent } from './select.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {SelectComponent} from './select.component';
 import {InputModule} from '@tk-ui/components/input/input.module';
-import {FormControlBaseModule} from '@tk-ui/components/form-control-base/form-control-base.module';
-import {FormsModule} from '@angular/forms';
-import {AutoPositionerModule} from '@tk-ui/components/auto-positioner/auto-positioner.module';
-import {AutoCloserModule} from '@tk-ui/components/auto-closer/auto-closer.module';
-import {AutoScrollerModule} from '@tk-ui/components/auto-scroller/auto-scroller.module';
 import {IconModule} from '@tk-ui/components/icon/icon.module';
-import {SelectBaseModule} from '@tk-ui/components/select-base/select-base.module';
-
+import {FormsModule} from '@angular/forms';
+import {OverlayModule} from '@tk-ui/components/overlay/overlay.module';
+import {SelectOptionsComponent} from './select-options/select-options.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 
 @NgModule({
-  declarations: [SelectComponent],
+  declarations: [
+    SelectComponent,
+    SelectOptionsComponent
+  ],
   exports: [
     SelectComponent
   ],
   imports: [
     CommonModule,
-    SelectBaseModule,
-  ]
+    InputModule,
+    IconModule,
+    FormsModule,
+    OverlayModule,
+    BrowserAnimationsModule,
+  ],
 })
 export class SelectModule { }

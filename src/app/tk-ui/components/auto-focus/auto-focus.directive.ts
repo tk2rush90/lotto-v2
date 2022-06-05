@@ -1,29 +1,25 @@
 import {AfterViewInit, Directive, ElementRef} from '@angular/core';
 
+/**
+ * Set focus to the host element on view init.
+ */
 @Directive({
   selector: '[appAutoFocus]'
 })
 export class AutoFocusDirective implements AfterViewInit {
 
   constructor(
-    private elementRef: ElementRef<HTMLElement>,
+    protected elementRef: ElementRef<HTMLElement>,
   ) { }
 
   ngAfterViewInit(): void {
-    this.setFocus();
+    this.element.focus();
   }
 
   /**
-   * return element
+   * Get host element.
    */
   get element(): HTMLElement {
     return this.elementRef.nativeElement;
-  }
-
-  /**
-   * set focus to element
-   */
-  setFocus(): void {
-    this.element.focus();
   }
 }

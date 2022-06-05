@@ -1,0 +1,14 @@
+@import "mixins";
+@import "props";
+
+// NumberStatistics.
+:host {
+  @include padding(20px);
+  display: block;
+  background-color: $white-a20;
+}
+
+// Space between number statistics.
+app-number-statistic + app-number-statistic {
+  margin-top: 20px;
+}

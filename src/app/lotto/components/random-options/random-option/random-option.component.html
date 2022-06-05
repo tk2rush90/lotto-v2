@@ -1,0 +1,17 @@
+<!-- Container for texts. -->
+<div class="text-container">
+  <!-- Name of option. -->
+  <div class="name">
+    {{data.name}}
+  </div>
+
+  <!-- Description for option. -->
+  <div class="description">
+    {{data.description}}
+  </div>
+</div>
+
+<!-- Checkbox -->
+<app-checkbox
+  [ngModel]="selected"
+  [disabled]="true"></app-checkbox>

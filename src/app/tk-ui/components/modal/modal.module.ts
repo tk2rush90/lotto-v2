@@ -1,15 +1,11 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {ModalOutletComponent} from './components/modal-outlet/modal-outlet.component';
-import {ModalGroupComponent} from './components/modal-group/modal-group.component';
-import {ModalBackdropComponent} from './components/modal-backdrop/modal-backdrop.component';
-import {ModalWrapperComponent} from './components/modal-wrapper/modal-wrapper.component';
-import {ModalContainerComponent} from './components/modal-container/modal-container.component';
-import {ModalHeaderComponent} from './components/modal-header/modal-header.component';
-import {ModalContentComponent} from './components/modal-content/modal-content.component';
-import {ModalActionsComponent} from './components/modal-actions/modal-actions.component';
-import {IconModule} from '@tk-ui/components/icon/icon.module';
-import {TextModule} from '@lotto/components/text/text.module';
+import {ModalOutletComponent} from './modal-outlet/modal-outlet.component';
+import {ModalGroupComponent} from './modal-group/modal-group.component';
+import {ModalBackdropComponent} from './modal-backdrop/modal-backdrop.component';
+import {Modal} from './modal/modal.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { ModalContainerComponent } from './modal-container/modal-container.component';
 
 
 @NgModule({
@@ -17,29 +13,15 @@ import {TextModule} from '@lotto/components/text/text.module';
     ModalOutletComponent,
     ModalGroupComponent,
     ModalBackdropComponent,
-    ModalWrapperComponent,
+    Modal,
     ModalContainerComponent,
-    ModalHeaderComponent,
-    ModalContentComponent,
-    ModalActionsComponent,
   ],
   exports: [
-    ModalOutletComponent,
-    ModalContainerComponent,
-    ModalHeaderComponent,
-    ModalContentComponent,
-    ModalActionsComponent
+    ModalOutletComponent
   ],
   imports: [
     CommonModule,
-    IconModule,
-    TextModule
-  ],
-  entryComponents: [
-    ModalGroupComponent,
-    ModalWrapperComponent,
-    ModalBackdropComponent,
+    BrowserAnimationsModule,
   ]
 })
-export class ModalModule {
-}
+export class ModalModule { }

@@ -1,0 +1,42 @@
+<div
+  class="repeat-counter"
+  *ngIf="repeatCount">
+  {{repeatCount}}회 반복
+</div>
+
+<!-- Selected numbers section. -->
+<section>
+  <!-- Header. -->
+  <app-section-header>
+    선택된 번호
+  </app-section-header>
+
+  <!-- Selected numbers container. -->
+  <div class="container selected-numbers">
+    <!-- Render balls. Bind `color` attribute to show different color by its value. -->
+    <app-lotto-ball
+      *ngFor="let ball of selectedBalls"
+      [data]="ball">
+    </app-lotto-ball>
+  </div>
+</section>
+
+<!-- Statistics section. -->
+<section>
+  <!-- Header. -->
+  <app-section-header
+    (actionClick)="openWinningDetails()"
+    action="자세히 보기 >">
+    당첨결과
+  </app-section-header>
+
+  <!-- Statistics container. -->
+  <div class="container statistics">
+    <div
+      *ngFor="let winning of winnings | keyvalue"
+      class="rank">
+      <span>{{winning.key}}등</span>
+      <span>{{winning.value}}회</span>
+    </div>
+  </div>
+</section>

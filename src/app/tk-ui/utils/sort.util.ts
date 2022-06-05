@@ -1,34 +1,48 @@
 import {ObjectUtil} from '@tk-ui/utils/object.util';
 
-// sort order
-export type SortOrder = 'asc' | 'desc';
+/**
+ * The order direction.
+ */
+export type OrderDirection = 'asc' | 'desc';
 
 /**
- * sort column info
+ * The value type to order.
+ */
+export type OrderType = 'string' | 'date' | 'number';
+
+/**
+ * Sort column info.
  */
 export interface SortColumn<T> {
-  // property name
+  /**
+   * The property name to sort.
+   */
   property: keyof T;
-  // order
-  order: SortOrder;
-  // value type
-  // default is string
-  type: 'string' | 'date' | 'number';
+
+  /**
+   * The order direction.
+   */
+  direction: OrderDirection;
+
+  /**
+   * The value type to order.
+   */
+  type: OrderType;
 }
 
 export class SortUtil {
   /**
-   * sort data as ascending
-   * @param a data 1
-   * @param b data 2
+   * Sort data as ascending.
+   * @param a - Data 1.
+   * @param b - Data 2.
    */
   static sortMethodAsc<T>(a: T, b: T): number {
     return a === b ? 0 : a > b ? 1 : -1;
   }
 
   /**
-   * sort data with order
-   * @param order sort order
+   * Get sort method when sorting data with just order.
+   * @param order - Sort order.
    */
   static sortMethodWithOrder<T>(order: 'asc' | 'desc'): any {
     if (order === undefined || order === 'asc') {
@@ -41,13 +55,13 @@ export class SortUtil {
   }
 
   /**
-   * sort data with ordered column
-   * @param property property string
-   * @param order sort order
-   * @param type value type
+   * Get sort method when sorting data with a single column.
+   * @param property - Property string.
+   * @param order - Sort order.
+   * @param type - Value type.
    */
-  static sortMethodWithOrderByColumn<T>({property, order, type = 'string'}: SortColumn<T>): any {
-    const sortMethod = this.sortMethodWithOrder(order);
+  static sortMethodWithOrderByColumn<T>({property, direction, type = 'string'}: SortColumn<T>): any {
+    const sortMethod = this.sortMethodWithOrder(direction);
 
     return (a: T, b: T) => {
       let v1: any = ObjectUtil.getObjectValue<T>(a, property as any);
@@ -75,7 +89,6 @@ export class SortUtil {
           return sortMethod(v1, v2);
         }
 
-        // handle default as string
         default: {
           throw new Error(`Invalid value type: '${type}'`);
         }
@@ -84,8 +97,8 @@ export class SortUtil {
   }
 
   /**
-   * sort data with ordered multiple columns
-   * @param sortedColumns sorted column list
+   * Get sort method when sorting data with multiple columns.
+   * @param sortedColumns - Sorted column list.
    */
   static sortMethodWithOrderMultiColumn<T>(sortedColumns: SortColumn<T>[]): any {
     const sortMethodsForColumn = (sortedColumns || []).map((item) =>
@@ -103,5 +116,4 @@ export class SortUtil {
       return sorted;
     };
   }
-
 }

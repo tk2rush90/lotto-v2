@@ -1,18 +1,30 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {environment} from '../../../../environments/environment';
+import {LoggerUtil} from '@tk-ui/utils/logger.util';
 
 const {
   production,
 } = environment;
 
 export interface RegisteredEvent {
-  // Event target
+  /**
+   * The event target.
+   */
   target: EventTarget;
-  // Event type
+
+  /**
+   * The event type.
+   */
   type: keyof WindowEventMap;
-  // Event handler
+
+  /**
+   * The event handler.
+   */
   handler: EventHandler;
-  // Event options
+
+  /**
+   * The event options.
+   */
   options?: boolean | AddEventListenerOptions;
 }
 
@@ -21,15 +33,19 @@ export type EventHandler = (event: any) => void;
 /**
  * Handle event listeners those need to be removed when component destroy.
  * Call `addEvent()` method to register event to manage.
- * Then, if the component is destroyed, it will call
+ * Then, if the component is destroyed, it will call.
  */
 @Injectable()
 export class EventListenerService implements OnDestroy {
-  // Registered events to be removed on destroy
+  /**
+   * Registered events to be removed on destroy.
+   */
   private _registeredEvents: RegisteredEvent[] = [];
 
-  constructor() {
-  }
+  /**
+   * Logger.
+   */
+  private _logger = LoggerUtil.createLogger(this);
 
   ngOnDestroy(): void {
     this._removeAllRegisteredEvents();
@@ -37,19 +53,21 @@ export class EventListenerService implements OnDestroy {
 
   /**
    * Add event to target.
-   * @param target event target
-   * @param type event type
-   * @param handler event handler
-   * @param options event options
+   * @param target - Event target.
+   * @param type - Event type.
+   * @param handler - Event handler.
+   * @param options - Event options.
    */
   addEvent(target: EventTarget, type: keyof WindowEventMap, handler: EventHandler, options?: boolean | AddEventListenerOptions): void {
     // Remove existing event.
-    this.removeEvent(target, type, handler);
+    this.removeEvent(target, type, handler, true);
 
     // Add new event.
     target.addEventListener(type, handler, options);
 
-    // Register event
+    this._logger.debug(`Event is added`, {target, type, handler, options});
+
+    // Register event.
     this._registerEvent({
       target,
       type,
@@ -60,22 +78,22 @@ export class EventListenerService implements OnDestroy {
 
   /**
    * Remove event from the target.
-   * @param target event target
-   * @param type event type
-   * @param handler event handler
+   * @param target - Event target.
+   * @param type - Event type.
+   * @param handler - Event handler.
+   * @param ignoreWarning - State of ignoring warning.
    */
-  removeEvent(target: EventTarget, type: keyof WindowEventMap, handler: EventHandler): void {
+  removeEvent(target: EventTarget, type: keyof WindowEventMap, handler: EventHandler, ignoreWarning = false): void {
     const registeredEvent = this._getRegisteredEvent(target, type, handler);
 
     if (registeredEvent) {
       const {target, type, handler, options} = registeredEvent;
 
-      target.removeEventListener(type, handler, options);
-
+      this._removeEventListener(target, type, handler, options);
       this._unregisterEvent(registeredEvent);
     } else {
-      if (!production) {
-        console.warn(`Trying to remove event which isn't registered in EventListenerService. This action is ignored.`, {
+      if (!ignoreWarning) {
+        this._logger.warn(`Trying to remove event which isn't registered in EventListenerService. This action is ignored.`, {
           target,
           type,
           handler,
@@ -86,7 +104,7 @@ export class EventListenerService implements OnDestroy {
 
   /**
    * Register event
-   * @param registeredEvent event to register
+   * @param registeredEvent - Event to register.
    */
   private _registerEvent(registeredEvent: RegisteredEvent): void {
     this._registeredEvents.push(registeredEvent);
@@ -94,7 +112,7 @@ export class EventListenerService implements OnDestroy {
 
   /**
    * Unregister event
-   * @param registeredEvent event to unregister
+   * @param registeredEvent - Event to unregister.
    */
   private _unregisterEvent(registeredEvent?: RegisteredEvent): void {
     this._registeredEvents = this._registeredEvents.filter(item => item !== registeredEvent);
@@ -103,9 +121,9 @@ export class EventListenerService implements OnDestroy {
   /**
    * Find and return registered event.
    * It only checks target, type, and handler.
-   * @param target event target
-   * @param type event type
-   * @param handler event handler
+   * @param target - Event target.
+   * @param type - Event type.
+   * @param handler - Event handler.
    */
   private _getRegisteredEvent(target: EventTarget, type: keyof WindowEventMap, handler: EventHandler): RegisteredEvent | undefined {
     return this._registeredEvents.find(item => {
@@ -120,9 +138,24 @@ export class EventListenerService implements OnDestroy {
    */
   private _removeAllRegisteredEvents(): void {
     this._registeredEvents.forEach(({target, type, handler, options}) => {
-      target.removeEventListener(type, handler, options);
+      this._removeEventListener(target, type, handler, options);
     });
 
     this._registeredEvents = [];
+  }
+
+  /**
+   * Remove the event from the target.
+   * @param target - The `EventTarget.`
+   * @param type - The event type.
+   * @param handler - The event handler.
+   * @param options - The event options.
+   */
+  private _removeEventListener(target: EventTarget, type: keyof WindowEventMap, handler: EventHandler, options?: boolean | AddEventListenerOptions): void {
+    target.removeEventListener(type, handler, options);
+
+    if (!production) {
+      this._logger.debug(`Event is removed`, {target, type, handler, options});
+    }
   }
 }

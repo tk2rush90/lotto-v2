@@ -1,9 +1,11 @@
+import {ObjectMap} from '@tk-ui/others/types';
+
 export class ObjectUtil {
   /**
-   * set object value with point separated property string
-   * @param obj object
-   * @param property property
-   * @param value value
+   * Set object value with property string.
+   * @param obj - The object to set value.
+   * @param property - The property string. Can be separated with `.` word like: `prop1.prop2`.
+   * @param value - The value to set.
    */
   static setObjectValue(obj: any, property: string, value: any): void {
     let target: any = obj;
@@ -23,9 +25,9 @@ export class ObjectUtil {
   }
 
   /**
-   * return specific value of the data
-   * @param data object data
-   * @param property data property string
+   * Get object value with property string.
+   * @param data - The object to get value.
+   * @param property  - The property string. Can be separated with `.` word like: `prop1.prop2`.
    */
   static getObjectValue<T>(data: any, property: string): T {
     const keys = property.split('.');
@@ -44,20 +46,46 @@ export class ObjectUtil {
   }
 
   /**
-   * change none array items to array
-   * @param items items
+   * Transform an array to map which is consist of unique keys of array.
+   * @param items - The items to get unique keys.
+   * @param property -
+   * The property to check from each item.
+   * If it is not specified, just create map with `item` in array.
    */
-  static noneArrayToArray<T>(items: any): T[] {
-    if (!items.length) {
-      return items;
-    }
+  static getUniqueKeys<T>(items: T[], property?: keyof T): ObjectMap<boolean> {
+    const map: ObjectMap<boolean> = {};
 
-    const list = [];
+    items.forEach(item => {
+      const value: string | number = property ? item[property] as any : item;
 
-    for (const i of items) {
-      list.push(i);
-    }
+      if (value) {
+        map[value] = true;
+      }
+    });
 
-    return list;
+    return map;
+  }
+
+  /**
+   * Group an array by its key.
+   * @param items - The items to group by key.
+   * @param property - The property of key to group.
+   */
+  static groupArrayByKey<T>(items: T[], property: keyof T): ObjectMap<T[]> {
+    const map: ObjectMap<T[]> = {};
+
+    items.forEach(item => {
+      const value: string | number = item[property] as any;
+
+      if (value) {
+        if (!map[value]) {
+          map[value] = [];
+        }
+
+        map[value].push(item);
+      }
+    });
+
+    return map;
   }
 }

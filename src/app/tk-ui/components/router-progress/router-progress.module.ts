@@ -1,11 +1,12 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterProgressComponent } from './router-progress.component';
-
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {RouterProgressComponent} from './router-progress.component';
 
 
 @NgModule({
-  declarations: [RouterProgressComponent],
+  declarations: [
+    RouterProgressComponent
+  ],
   exports: [
     RouterProgressComponent
   ],
